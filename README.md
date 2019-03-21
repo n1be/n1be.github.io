@@ -1,2 +1,3 @@
-# n1be.github.io
-github web page for user n1be
+# github web site for user n1be
+The site is available at https://n1be.github.io/
+

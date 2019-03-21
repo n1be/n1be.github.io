@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Wildwood Webcams</title>
+	<meta name="description" content="Recent webcam snapshots." />
+	<link rel="icon" type="image/png" href="wildicon.png">
+    <!-- The following script is from:
+        https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/2.5.2/Dropbox-sdk.min.js
+    -->
+    <script src="Dropbox-sdk_2.5.2_min.js"></script>
+
+	<script language="JavaScript" type="text/javascript">
+        var shown_objs = {},
+            dbx = new Dropbox({ accessToken:
+            "n8usDdsk46oAAAAAAASLZbalFZ8Mx6ov3jDVTmWUJ3jH1HTp9q2IMo647ZzS3ua6" });
+
+        function debug_log( str) {
+            // console.log( str);
+        }
+
+        function update_if_changed( path, id, update_function) {
+            dbx.filesGetMetadata({"path": path, "include_media_info": false,
+                "include_deleted": false, "include_has_explicit_shared_members": false})
+                .then(function(response) {
+                    var old_hash = shown_objs[ id];
+                    var new_hash = response.content_hash;
+                    if (old_hash == new_hash) {
+                        debug_log( id + ": unchanged hash -- skipping update");
+                    } else {
+                        // Delay to allow upload to complete ...
+                        debug_log( id + ": changed hash -- considering update");
+                        shown_objs[ id] = new_hash;
+                        window.setTimeout( 
+                            function() {
+                                update_when_not_changed( path, id, update_function)
+                            }, 3000);
+                    }
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+        }
+        function update_when_not_changed( path, id, update_function) {
+            dbx.filesGetMetadata({"path": path, "include_media_info": false,
+                "include_deleted": false, "include_has_explicit_shared_members": false})
+                .then(function(response) {
+                    var old_hash = shown_objs[ id];
+                    var new_hash = response.content_hash;
+                    if (old_hash == new_hash) {
+                        debug_log( id + ": updating since hash stable");
+                        update_function();
+                    } else {
+                        console.log( id + ": changed hash -- delaying update");
+                        shown_objs[ id] = new_hash;
+                        window.setTimeout( 
+                            function() {
+                                update_when_not_changed( path, id, update_function)
+                            }, 2000);
+                    }
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+        }
+
+        function get_image( path, id) {
+            update_if_changed( path, id,
+              function() {
+                dbx.filesDownload({"path": path})
+                    .then(function(response) {
+                        var image = document.getElementById(id);
+                        image.src = window.URL.createObjectURL(response.fileBlob);
+                        debug_log( id + ': updated');
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                    });
+              });
+        }
+        function get_text( prefix, path, id) {
+            // Since the blob is small, we always fetch it, instead
+            // of an additional server call just to check if it changed.
+            dbx.filesDownload({"path": path})
+                .then(function(response) {
+                    var reader = new FileReader();
+                    reader.addEventListener("loadend", function() {
+                        var chars = reader.result.trim();
+                        if ( chars.length > 0) {
+                        	document.getElementById(id).innerHTML = prefix + chars;
+                        	debug_log( id + ': updated');
+                        } else {
+                        debug_log( id + ": skipping update");
+                        }
+                    });
+                    reader.readAsText(response.fileBlob);
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+        }
+        function refresh_elements() {
+            // console.clear();
+            debug_log( "Updating all elements")
+            get_text( "Looking South ", "/photob_time.txt","b_time");
+            get_image( "/photob_latest.jpg", "b_img");
+            get_text( "LR view ", "/zerocam_time.txt","lr_time");
+            get_text( "", "/zero_temp.txt","lr_temp");
+            get_image( "/zerocam_latest.jpg", "lr_img");
+            window.setTimeout( refresh_elements, 20000);
+        }
+    </script>
+</head>
+<body bgcolor="Black" text="Yellow" onload="refresh_elements()">
+	<center>
+        <h2><p id="b_time" /></h2>
+        <img alt="view from br" id="b_img"  width="960" height="540" border="0">
+	<hr />
+        <h2><p id="lr_time" /></h2>
+        <h3><p id="lr_temp" /></h3>
+        <img alt="view from lr" id="lr_img" width="1312" height="986" border="0">
+	</center>
+</body>
+</html>

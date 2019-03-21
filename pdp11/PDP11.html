@@ -1,0 +1,1697 @@
+<head>
+  <title>PDP Nostalgia - RSX-11M</title>
+ <style>  
+ table {  
+ background: #609900;  
+ }  
+   
+ td {  
+ background: #ffffdd
+ }  
+ </style>  
+</head>
+<body>
+  <h1>PDP-11 Hardware</h1>
+  <h2>Obtain A System</h2>
+I extensively used various PDP-11s from 1974 to 1985, mostly as a DEC employee.  But I no longer have access to a PDP-11.  So I will resort to running a simulated system.  This project uses the SIMH PDP11 simulator from <a href="http://simh.trailing-edge.com/">The Computer History Simulation Project</a>. 
+<p>
+It was very simple to get the simulator running on my Linux system.
+First download the zip file of the sources for the latest version of SIMH.
+Unzip and use "make" to build the default target in the makefile.
+The resulting simulator lacks ethernet support but is sufficient for my plans.
+<p>
+  <h2> Select Your System Configuration</h2>
+Next select a system configuration.  Most demanding of resources, I want to be able to run late 1970's vintage RSX-11M with all executive features.  Other projects and standalone programs can also be accomodated by such a large system.  Choose your configuration carefully since a configuration change may require running a lengthy SYSGEN to adapt the OS to the hardware.  Simulated hardware is inexpensive.  So use a generous configuration.
+<p>
+ <CENTER>
+ <TABLE BORDER=3>
+  <CAPTION> <em>I selected a high end PDP-11/70 system</em> </CAPTION>
+  <TR>
+      <TD> <IMG SRC="pdp11-70-handbook-50.jpg" ALT="PDP-11/70 System pictured on the processor handbook">
+      <TD> 
+<PRE>
+         CPU: PDP-11/70, FPP,
+              512KW memory (16-bit words)         
+
+         Disk Drives:
+              (4) RK05 ( 2.5 MB each)
+              (2) RL01 (   5 MB each)
+              (2) RL02 (  10 MB each)
+              (4) RP06 ( 174 MB each)
+
+         Mag Tape: (2) TU77 drives
+
+         Paper Tape Reader and Punch
+
+         LP11-S Line Printer
+
+         Console Terminal (132 columns)
+
+         DZ11 (8) serial lines
+
+         KW11-L Line Clock
+</PRE>
+  </TABLE>
+ </CENTER>
+<p>
+Unfortunately, SIMH does not provide the sexiest peripheral, the operator's console with switches and lights.  For me the lights are very much of interest.  Just seeing something strange in the lights led to finding and fixing a bug in the SPM-11M data collector.
+<p>
+When run on certain PDP-11 processors, each DEC Operating System displayed a characteristic light pattern on the front of the processor any time the system was idle.  The RSX-11M light pattern was two sets of lights that swept outwards to the left and right from the center of the light display (or inwards if the IND indirect command file processor program was currently running).  The IAS light pattern was a single bar of lights that swept leftwards.  Correspondingly, a jumbled light pattern (reflecting memory fetches) was a visible indication that the computer was under load as this meant that the system idle process (known as a task under RSX), which set the moving light pattern, was not being run.
+
+<p>
+<TABLE BORDER=3 ALIGN=CENTER>
+<CAPTION> <em>The PDP-11/70 Operator's Console</em> </CAPTION>
+  <TR><TD><IMG SRC="800px-Pdp-11-70-panel.jpg" ALT="PDP-11/70 Operator's Console">
+</TABLE>
+
+  <h1>The Operating System</h1>
+SIMH has been available for about 10 years.  But I did not intimately know the various PDP-11 operating systems that were downloadable from  <a href="http://simh.trailing-edge.com/">The Computer History Simulation Project</a>.  I had toyed with DOS/Batch but was intimidated by RSTS.  Mostly the lack of documentation was my limitation.
+<p>
+  <h2>RSX-11M V3.2 - Install Media</h2>
+Then I had the good fortune to find a very complete set of RSX-11M Version 3.2 installation media and documentation at the <a href="http://www.bitsavers.org/">bitsavers.org</a> site.  Drill down in their <a href="http://www.bitsavers.org/bits/">Software Archive</a> and <a href="http://www.bitsavers.org/pdf">PDF Document Archive</a> where you can find documentation and software for
+minicomputers and mainframes, from the 50's to the 80's.
+<p>
+The RSX-11M V3.2 install media are gzip compressed RL01 disk images.  Once these files are de-compressed with gzip or zcat, the resulting image file can be directly used with SIMH.  When I use this media, the de-compressed files will be renamed to have the kind of disk as the type, for example, RSX-11M_V3.2_RSX11MBL26_3.2.rl01
+<p>
+<CENTER><TABLE cellpadding=5><CAPTION><em>RSX-11M V3.2 RL01 Install Kit at bitsavers.org</em></CAPTION><TD><PRE>
+Index of /bits/DEC/pdp11/discimages/rl01/rsx11m_3.2
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/F4_IAS_RSX_2.1.DSK.gz">F4_IAS_RSX_2.1.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_AUTOPATCH1B.DSK.gz">RSX-11M_V3.2_AUTOPATCH1B.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_MAPSRC.DSK.gz">RSX-11M_V3.2_MAPSRC.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_RLUTIL.DSK.gz">RSX-11M_V3.2_RLUTIL.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_RMSKIT.DSK.gz">RSX-11M_V3.2_RMSKIT.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_RSX11MBL26_3.2.DSK.gz">RSX-11M_V3.2_RSX11MBL26_3.2.DSK.gz</a>
+     <a href="http://www.bitsavers.org/bits/DEC/pdp11/discimages/rl01/rsx11m_3.2/RSX-11M_V3.2_UNMSRC.DSK.gz">RSX-11M_V3.2_UNMSRC.DSK.gz</a>
+</PRE></TABLE></CENTER>
+<p>
+Finding the install media was the answer to my desires.  I was trained to support RSX-11M V3.* in 1977.  Hopefully I still remember enough of the finer points to turn this into a useful system.
+<p>
+  <h2>RSX-11M V3.2 - Documentation</h2>
+The documentation is probably more valuable than the software.  Without these manuals I would not remember how to do the software installations I routinely did 30 years ago.  Although not the complete documentation set for this version of RSX-11M, the following manuals are available as <a href="http://www.bitsavers.org/pdf/dec/pdp11/rsx11/RSX11M_V3.2_Jun79/">PDF files at bitsavers</a>.  Creative web searching will locate even more RSX-11M manuals.
+<p>
+<CENTER><TABLE cellpadding=5><CAPTION><em>RSX-11M V3.2 Documentation files at bitsavers.org</em></CAPTION><TD><PRE>
+RSX11M_3.2ManualList.txt
+RSX11_3.2_projPlan_Aug78.pdf
+RSX-11M V3.2_MiniReference_May79.pdf                AV-5570C-TC
+     
+     Volume 1:   Introduction
+AA-2555D-TC_Introduction_to_RSX-11M_Jun79.pdf
+AA-2573F-TC_RSX-11M_V3.2_Release_Notes_Jun79.pdf
+AA-2593E-TC_RSX-11M_V3.2_Documentation_Directory_May79.pdf
+AA-5245B-TC_Beginners_Guide_to_RSX-11M_Jun79.pdf
+AA-5430C_TC_RSX-11M_V3.2_Master_Index_Aug79.pdf
+AE-3407N-TC_RSX-11M_V3.2_SPD_Dec79.pdf
+
+     Volume 2:   Operation
+RSX-11M System Generation and Management Guide      AA-H625A-TC
+RSX-11M/M-PLUS MCR Operations Manual                AA-H263A-TC
+
+     Volume 3:   Program Development
+RSX-11M/M-PLUS Guide to Program Development         AA-H264A-TC
+RSX-11M/M-PLUS Task Builder Manual                  AA-H266A-TC
+IAS/RSX-11 MACRO-11 Reference Manual           DEC-11-OIMRA-B-D
+IAS/RSX-11 ODT Reference Manual                DEC-11-OIODA-B-D
+RSX-11M Guide to Writing an I/O Driver              AA-2600D-TC
+IAS/RSX-11 System Library Routines Reference Manual AA-5580A-TC
+RSX-11M/M-PLUS Executive Reference Manual           AA-H265A-TC
+
+     Volume 4:   Utilities
+RSX-11 Utilities Manual                             AA-H268A-TC
+
+     Volume 5:   File Management and I/O
+IAS/RSX-11 I/O Operations Reference Manual          AA-2515D-TC
+RSX-11M/M-PLUS I/O Drivers Reference Manual         AA-H269A-TC
+RMS-11 User's Guide                                 AA-D538A-TC
+RMS-11 Installation Guide                           AA-H235A-TC
+RMS-11 MACRO-11 Reference Manual                    AA-H683A-TC
+
+     Volume 6:   Maintenance
+RSX-11M/M-PLUS Error Logging Reference Manual       AA-H270A-TC
+RSX-11M/M-PLUS User Mode Diagnostics Reference Man  AA-H271A-TC
+</PRE></TABLE></CENTER>
+
+To get a system running and for basic usage info, you'll need to be familar with the information in Volumes 1, 2, and 4.
+<p>
+For writing programs in assembly language, Volumes 3 and 5 will be your guide.  (Maybe I'll take this tale far enough to show an example of program development.)
+<p>
+On a simulated system where hardware failures are hidden, Volume 6 is of little use.  But other manuals listed in the RSX11M_3.2ManualList.txt may be useful.
+<p>
+The RSX-11M/M-PLUS Crash Dump Analyzer Reference Manual (AA-H272A-TC) will help if the RSX-11M kernel crashes or hangs.
+<p>
+For writing programs in FORTRAN, I think these manuals cover usage of the compiler and runtime library included in the installation media:
+<p>
+<CENTER><TABLE cellpadding=5><CAPTION><em>PDP-11 FORTRAN IV Documents</em></CAPTION><TD><PRE>
+PDP-11 FORTRAN Language Reference Manual            AA-1855D-TC
+IAS/RSX-11 FORTRAN IV User's Guide                  AA-1936E-TC
+IAS/RSX-11 FORTRAN IV Installation Guide            AA-1821D-TC
+<PRE></TABLE></CENTER>
+<p>
+For the most part, the above mentioned documents are references, useful when you already know RSX-11M.  I also tried to locate some tutorials.  
+Fortunately bitsavers.org has <a href="http://www.bitsavers.org/pdf/dec/pdp11/rsx11/OS_internalsCourse_1983/">three books from the RSX-11M Operating System Internals course</a>.  This course takes one to the plateau of RSX-11M System Programming.  I no longer have the equivalent materials from my 1970's training.  Even though a newer version of RSX is discussed in the online books, it will largely apply to the task at hand with RSX-11M V3.2.
+<p>
+A web search did not locate an online copy of the RSX-11M V3.2 System Logic Manual (AA-5579B-TC).  But bitsavers.org has <a href="http://www.bitsavers.org/pdf/dec/pdp11/rsx11/RSX11M_V3.1_Dec77/RSX11M_V3.1_SysLogicManVol1_Nov78.pdf">Volume 1</a> and <a href="http://www.bitsavers.org/pdf/dec/pdp11/rsx11/RSX11M_V3.1_Dec77/RSX11M_V3.1_SysLogicManVol2_Nov78.pdf">Volume 2</a> of this book for RSX-11M V3.1.  The System Logic Manual is probably overkill.  It will explain how the core components of RSX-11M work, covering the Executive, File Control Processor and MCR command interpreter.  This is useful if one wants to extend the Executive, but not needed for operating a RSX-11M system and developing application programs.
+<p>
+In summary, start by getting familar with Volumes 1,2,4 and maybe the OS Internals Course books.
+<p>
+<hr />
+  <h1>SIMH Setup</h1>
+Compressed media are stored in one of the directories on my Linux machine:
+<p>
+<TABLE cellpadding=5><CAPTION><em>Parent Directory with Downloaded Media</em></CAPTION><TD><PRE>
+-rw-r--r-- 1 rob rob  154112 2007-05-05 12:41 F4_IAS_RSX_2.1.DSK.gz
+-rw-r--r-- 1 rob rob      82 2010-04-17 15:18 README.txt
+-rw-r--r-- 1 rob rob  383940 2007-05-05 12:41 RSX-11M_V3.2_AUTOPATCH1B.DSK.gz
+-rw-r--r-- 1 rob rob 1691573 2007-05-05 12:41 RSX-11M_V3.2_MAPSRC.DSK.gz
+-rw-r--r-- 1 rob rob 1616977 2007-05-05 12:42 RSX-11M_V3.2_RLUTIL.DSK.gz
+-rw-r--r-- 1 rob rob  524095 2007-05-05 12:42 RSX-11M_V3.2_RMSKIT.DSK.gz
+-rw-r--r-- 1 rob rob 1607457 2007-05-05 12:42 RSX-11M_V3.2_RSX11MBL26_3.2.DSK.gz
+-rw-r--r-- 1 rob rob 1639982 2007-05-05 12:42 RSX-11M_V3.2_UNMSRC.DSK.gz
+drwxr-xr-x 3 rob rob    4096 2010-04-22 22:34 X
+</PRE></TABLE>
+Then create a subdirectory, "X", to be the current working directory (CWD) when running the simulator.  The CWD will contain the files for simulated media, a script to run the SIMH and a configuration file for SIMH.  Additional files will appear in this directory, for data sent to the console, line printer or other devices.
+<p>
+<TABLE cellpadding=5><CAPTION><em>SIMH Current Working Directory</em></CAPTION><TD><PRE>
+-rw-r--r-- 1 rob rob   5242880 2010-04-18 19:40 F4_IAS_RSX_2.1.rl01
+-rw-r--r-- 1 rob rob   5242880 2010-04-18 19:40 RSX-11M_V3.2_AUTOPATCH1B.rl01
+-rw-r--r-- 1 rob rob   5242880 2010-04-22 21:46 RSX-11M_V3.2_MAPSRC.rl01
+-rw-r--r-- 1 rob rob   5242880 2010-04-22 21:46 RSX-11M_V3.2_RLUTIL.rl01
+-rw-r--r-- 1 rob rob   5242880 2010-04-18 19:40 RSX-11M_V3.2_RMSKIT.rl01
+-rw-r--r-- 1 rob rob   5243087 2010-04-22 20:22 RSX-11M_V3.2_RSX11MBL26_3.2.rl01
+-rw-r--r-- 1 rob rob   5242880 2010-04-22 21:46 RSX-11M_V3.2_UNMSRC.rl01
+-rwxr-xr-x 1 rob rob       358 2010-04-21 20:09 run.sh
+-rw-r--r-- 1 rob rob      3105 2010-04-22 22:34 sim.ini
+</PRE></TABLE>
+"run.sh" is the executable script to run the simulator.  First it makes decompressed copies of the any install media that are missing from X, then it starts SIMH.  Automatically copying the media is handy since running SYSGEN to configure RSX-11M will modify the contents of the install media; eventually we'll need the original media again.
+<p>
+<TABLE cellpadding=5><CAPTION><em>Executable script "run.sh"</em></CAPTION><TD><PRE>
+#!/bin/sh
+# Run simh with config in the current directory...
+#
+SIMH=/home/R/Prog/Simh/simhv38-1/BIN/pdp11
+#
+# Get clean copies of install media
+for f in ../*.DSK.gz ; do
+    imgfile=`basename $f | sed -e 's/.DSK.gz/.rl01/'`
+    if [ ! -f "$imgfile" ]
+    then
+	echo Restoring $imgfile
+	zcat $f > "$imgfile"
+    fi
+done
+#
+# Now run the simulator
+$SIMH ./sim.ini
+</PRE></TABLE>
+<p>
+"sim.ini" configures SIMH, selecting the configuration of the PDP-11.  This provides a printout of the CSR Address and Interrupt VECTORS for every device.  Those numbers will be needed during SYSGEN.
+<p>
+I prefer having separate interfaces for the console used to communicate with the PDP-11 OS vs. the terminal used to control SIMH.  This initialization script also opens a separate window for the PDP-11 console terminal.  That terminal connects to the simulation by telnet to port 10000.  Similarly, the simulator will accept telnet connections to port 10001 for terminals that connect to the DZ11.
+<p>
+What can go into the simulator initialization file and SIMH commands are documented in the generic user guide "simh_doc.pdf" and the specific guide for this simulated machine, "pdp11_doc.pdf".
+<p>
+<TABLE cellpadding=5><CAPTION><em>"sim.ini" Simulator Configuration file</em></CAPTION><TD><PRE>
+; SIMH PDP-11 initialization
+
+; record a copy of console output, send debug info to simh's stderr
+SET CONSOLE LOG=./console.log
+SET CONSOLE DEBUG=STDERR
+echo ======================================================================
+
+; configure the CPU  ; (default is 11/73 w/256KB MEM, running unthrottled)
+SET CPU 11/70, 1M
+; throttle not needed because idle detect works with RSX-11M
+SET CPU IDLE
+;SET THROTTLE 500K
+SHOW CPU
+
+
+; Configure devices
+
+; disable default devices we don't want/need
+SET CR  DISABLE
+SET HK  DISABLE
+SET RQ  DISABLE
+SET RX  DISABLE
+SET TM  DISABLE
+SET TQ  DISABLE
+SET XQ  DISABLE
+
+; Massbus RP06's for system and spare disks (up to 8 drives)...
+SET RHA ENABLE
+SHOW RHA
+SET RP  ENABLE
+SET RP0 RP06, WRITEENABLED
+SET RP1 RP06, WRITEENABLED
+SET RP2 RP06, WRITEENABLED
+SET RP3 RP06, WRITEENABLED
+SET RP4 DISABLE
+SET RP5 DISABLE
+SET RP6 DISABLE
+SET RP7 DISABLE
+ATTACH RP0 ./rsx11m_sysdisk.rp06
+ATTACH RP1 ./rsx11m_usrdisk.rp06
+SHOW RP
+
+; 9-track Massbus magtapes (2 drives)...
+SET RHB ENABLE
+SHOW RHB
+SET TU  ENABLE
+SET TU  TM03
+SET TU0 TU77
+SET TU1 TU77
+SET TU2 DISABLE
+SET TU3 DISABLE
+SET TU4 DISABLE
+SET TU5 DISABLE
+SET TU6 DISABLE
+SET TU7 DISABLE
+SHOW TU
+
+; RL01 distribution media...
+SET RL  ENABLE
+SET RL0 ENABLE, RL01, WRITEENABLED
+ATTACH RL0 ./RSX-11M_V3.2_RSX11MBL26_3.2.rl01
+SET RL1 ENABLE, RL01, WRITEENABLED
+SET RL2 ENABLE, RL02, LOCKED
+SET RL3 ENABLE, RL02, LOCKED
+SHOW RL
+
+; RK05 data disks (4 drives)...
+SET RK ENABLE
+SET RK0 WRITEENABLED
+SET RK1 WRITEENABLED
+SET RK2 WRITEENABLED
+SET RK3 WRITEENABLED
+SET RK4 DISABLED
+SET RK5 DISABLED
+SET RK6 DISABLED
+SET RK7 DISABLED
+SHOW RK
+
+echo Paper Tape (High Speed Reader and Punch)...
+SHOW PTR
+SHOW PTP
+
+echo LP11-S Line Printer...
+ATTACH LPT ./lp11.out
+SHOW LPT
+
+echo Console DL11(-A?) serial port
+SHOW TTI
+SHOW TTO
+
+; DZ11 (8 interactive user ports)...
+SET DZ ENABLE
+SET DZ LINES=8
+ATTACH DZ  10001
+SHOW DZ
+
+echo KW11-L Line Clock...
+SHOW CLK
+
+; Separate the simulated PDP11 Console from the Simh command window
+SET CONSOLE TELNET=10000
+;
+; Open a separate terminal window for the system console.
+; This will simulates a 132-column hardcopy terminal like the LA36.
+ECHO *********************************************************************
+ECHO *  Opening a new terminal window for the PDP-11 System Console ...  *
+;! xterm -sl 10000 -sb -aw -j -T 'PDP-11 Console' -e 'telnet localhost 10000' &
+! gnome-terminal -t 'PDP-11 Console' --geometry=132x36 -e 'telnet localhost 10000' &
+ECHO *********************************************************************
+ECHO
+
+ECHO ******************************************************
+ECHO *  Enter a BOOT command to start the simulator:      *
+ECHO *    BOOT RP0  ; boots from the RP06 system disk     *
+ECHO *    BOOT RL0  ; boots from the RL01 install media   *
+ECHO *                                                    *
+ECHO * NOTE:                                              *
+ECHO *   Ctl-E at this terminal interrupts the simulator  *
+ECHO ******************************************************
+</PRE></TABLE>
+<p>
+There is a nice printout when starting SIMH.  Because the files for the RP06 disks do not already exist, SIMH creates those files and prompts whether to extend these files to their full size.  Those prompts will not be repeated in the future if the attached files exist with a size greater than zero when starting SIMH.
+
+<p>
+<TABLE cellpadding=5><CAPTION><em>The SIMH command window</em></CAPTION><TD><PRE>
+$ ./run.sh 
+
+PDP-11 simulator V3.8-1
+Logging to file "./console.log"
+Debug output to "STDERR"
+======================================================================
+Disabling XQ
+CPU, 11/70, FPP, RH70, idle enabled, stability wait = 20s, autoconfiguration
+ enabled, 1024KB
+RHA, address=17776700-17776753, vector=254
+RP: creating new file
+Overwrite last track? [N] 
+RP: creating new file
+Overwrite last track? [N] 
+RP, Massbus adapter 0, 4 units
+  RP0, 87MW, attached to ./rsx11m_sysdisk.rp06, write enabled, RP06
+  RP1, 87MW, attached to ./rsx11m_usrdisk.rp06, write enabled, RP06
+  RP2, 87MW, not attached, write enabled, RP06
+  RP3, 87MW, not attached, write enabled, RP06
+RHB, address=17772440-17772477, vector=224
+TU, Massbus adapter 1, TM03, 2 units
+  TU0, not attached, write enabled, TU77, SIMH format, unlimited capacity
+  TU1, not attached, write enabled, TU77, SIMH format, unlimited capacity
+RL, address=17774400-17774411, vector=160, 4 units
+  RL0, 2621KW, attached to ./RSX-11M_V3.2_RSX11MBL26_3.2.rl01, write enabled, RL01
+  RL1, 2621KW, not attached, write enabled, RL01
+  RL2, 5242KW, not attached, write locked, RL02
+  RL3, 5242KW, not attached, write locked, RL02
+RK, address=17777400-17777417, vector=220, 4 units
+  RK0, 1247KW, not attached, write enabled
+  RK1, 1247KW, not attached, write enabled
+  RK2, 1247KW, not attached, write enabled
+  RK3, 1247KW, not attached, write enabled
+Paper Tape (High Speed Reader and Punch)...
+PTR, address=17777550-17777553, vector=70, not attached
+PTP, address=17777554-17777557, vector=74, not attached
+LP11-S Line Printer...
+LPT, address=17777514-17777517, vector=200, attached to ./lp11.out
+Console DL11(-A?) serial port
+TTI, address=17777560-17777563, vector=60, 7b
+TTO, address=17777564-17777567, vector=64, 7p
+Listening on port 10001 (socket 9)
+DZ, address=17760100-17760107*, vector=300-304, lines=8, attached to 10001, 8b, 0 connections
+KW11-L Line Clock...
+CLK, 60Hz, address=17777546-17777547, vector=100
+Listening on port 10000 (socket 10)
+*********************************************************************
+*  Opening a new terminal window for the PDP-11 System Console ...  *
+*********************************************************************
+
+******************************************************
+*  Enter a BOOT command to start the simulator:      *
+*    BOOT RP0  ; boots from the RP06 system disk     *
+*    BOOT RL0  ; boots from the RL01 install media   *
+*                                                    *
+* NOTE:                                              *
+*   Ctl-E at this terminal interrupts the simulator  *
+******************************************************
+sim> BOOT RL0
+</PRE></TABLE>
+
+<h1>Installing RSX-11M</h1>
+Eventually we will boot from the RP06 and be able to run a SYSGEN using just that one disk.  But we are starting with an RL01 kit.  The small disk kits required shuffling media during SYSGEN as we will see.  In anticipation of future work, first we copy the files from each of the unmodified install disks to the RP06.
+The copy would be trivial if I had a "big disk" kit for RSX-11M.  The kit tape would be booted and restored to the RP06 and the sysgen could then proceed with no disk shuffling.
+<p>
+When copying the install media, I will use mount commands that name the volume expected to assure the correct disk is used in DL1.  The volume name is up to 12 characters, stored in ASCII with null padding in LBN 1.  (This is documented in the ODS1 specification.)  This Linux command dumps the volume name field from the simulated disk files:
+<p>
+<TABLE cellpadding=5><CAPTION><em>Volume Names of Install Media</em></CAPTION><TD><PRE>
+$ for f in *.rl01; do echo; echo "disk:  $f"; od -Ao -j 526 -N 12  -t a $f; done
+
+disk:  F4_IAS_RSX_2.1.rl01
+0001016   F   O   R nul nul nul nul nul nul nul nul nul
+
+disk:  RSX-11M_V3.2_AUTOPATCH1B.rl01
+0001016   A   U   T   O   P   A   T   C   H   B   1 nul
+
+disk:  RSX-11M_V3.2_MAPSRC.rl01
+0001016   M   A   P   S   R   C nul nul nul nul nul nul
+
+disk:  RSX-11M_V3.2_RLUTIL.rl01
+0001016   R   L   U   T   I   L nul nul nul nul nul nul
+
+disk:  RSX-11M_V3.2_RMSKIT.rl01
+0001016   R   M   S   K   I   T nul nul nul nul nul nul
+
+disk:  RSX-11M_V3.2_RSX11MBL26_3.2.rl01
+0001016   R   S   X   M   2   6 nul nul nul nul nul nul
+
+disk:  RSX-11M_V3.2_UNMSRC.rl01
+0001016   U   N   M   S   R   C nul nul nul nul nul nul
+</PRE></TABLE>
+
+
+<h2>Initialize RP06 and copy Install Media files to it</h2>
+Booting from RL0, via a hardware bootstrap, copies LBN 0 from that drive to low memory and the CPU begins executing what was loaded.  The boot block on the RL01 install media loads an unmapped Executive.  This is for systems without memory management hardware.
+<p>
+To used more than 28KW of memory it is necessary to use a mapped Executive.  The first commands entered perform a software bootstrap of the mapped Executive in [1,54].  Notice how the banner that announces the executive changes to show MAPPED and more memory available.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+  RSX-11M V3.2 BL26   28K 
+>RED DL:=SY:
+>RED DL:=LB:
+>MOU DL:RSXM26
+>@DL:[1,2]STARTUP
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: ^Z
+>@ <EOF>
+>ins $boo
+>boo [1,54]
+
+  RSX-11M V3.2 BL26   124K   MAPPED
+>RED DL:=SY:
+>RED DL:=LB:
+>MOU DL:RSXM26
+>@DL:[1,2]STARTUP
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: 25-apr-10 16:52
+>TIM 25-apr-10 16:52
+>* ENTER LINE WIDTH OF THIS TERMINAL [D D:132.]: 
+>SET /BUF=TI:132.
+>ACS SY:/BLKS=512.
+>;
+>; NOTE - The Baseline INDirect must be replaced by BIGIND with 
+>;      a priority of 10. for SYSGEN.
+>;
+>;  ie  >REM ...AT.
+>;      >INS $BIGIND/PRI=10.
+>;
+>@ <EOF>
+</PRE></TABLE>
+<p>
+SIMH uses names like RP, RL and RK to name the hardware.  This corresponds to the names of the hardware devices.  But RSX-11M uses different names, DB, DL, and DK, respectively, for these devices.  Also note that Ctrl-Z is used to indicate end-of-file thus terminating programs cleanly when supplied to an input prompt.
+<p>
+Now load a device driver for the RP06.  Then initialize that disk.  The utility tasks are installed before using them so shortcut commands can be use to invoke them.  The DEV command shows all devices.  The drivers built for the baseline executive only have two device units.  Thus only the first two RL drives can be used until we have generated an executive for this hardware configuration.
+<p>
+By setting the terminal session to a privileged UIC of [1,1] the following PIP commands will be able to write to directories for any UIC.
+
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>loa db:/par=secpar
+>ins $ini
+>ini db0:SYSTEM 
+INI -- NO BAD BLOCK DATA FOUND
+>rem ...ini
+>mou db0:SYSTEM
+>dev
+DB0: MOUNTED LOADED TYPE=RP04
+DB1: LOADED TYPE=RP04
+DL0: MOUNTED LOADED TYPE=RL01
+DL1: LOADED TYPE=RL01
+TT0:
+NL0:
+TI0:
+CO0:    TT0:
+CL0:    TT0:
+LB0:    DL0:
+SY0:    DL0:
+>
+>set /uic=[1,1]
+>ins $pip
+>
+>; copy files from baseline disk
+>pip db0:[*,*]/fo/cd/uf=dl:[*,*]*.*
+>
+</PRE></TABLE>
+<p>
+Once the ">" prompt is seen indicating PIP has finished, halt the simulator by typing Ctrl-E in the SIMH command window and attach the FORTRAN IV disk to RL1.  Then continue the simulator and at the PDP-11 Console enter the commands to copy this install disk to DB0:.  Once you are again prompted with a ">" showing PIP has finished, dismount the disk.
+<p>
+Repeat this process of stopping SIMH, changing the attached disk, and continuing until all the indicated media are copied.
+<p>
+Because the some files are supplied on more than one disk, you may safely ignore the repeated warnings "PIP -- OUTPUT FILE ALREADY EXISTS - NOT SUPERSEDED".
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>; at this point ATTACH RL1 F4_IAS_RSX_2.1.rl01
+>mou dl1:FOR
+>pip db0:[*,*]/fo/cd/uf=dl1:[*,*]*.*
+>dmo dl1:
+DMO -- TT0:   DISMOUNTED FROM DL1:    *** FINAL DISMOUNT ***
+ *** DL1:  -- DISMOUNT COMPLETE 
+
+>; at this point ATTACH RL1 RSX-11M_V3.2_UNMSRC.rl01
+>mou dl1:UNMSRC
+>pip db0:[*,*]/fo/cd/uf=dl1:[*,*]*.*
+PIP -- OUTPUT FILE ALREADY EXISTS - NOT SUPERSEDED
+DB0:[1,1]KMCLP.BIN;1
+...
+>dmo dl1:
+DMO -- TT0:   DISMOUNTED FROM DL1:    *** FINAL DISMOUNT ***
+ *** DL1:  -- DISMOUNT COMPLETE 
+
+>; at this point ATTACH RL1 RSX-11M_V3.2_RLUTIL.rl01
+>mou dl1:RLUTIL
+>pip db0:[*,*]/fo/cd/uf=dl1:[*,*]*.*
+PIP -- OUTPUT FILE ALREADY EXISTS - NOT SUPERSEDED
+DB0:[1,50]FMT.TSK;1
+...
+>dmo dl1:
+DMO -- TT0:   DISMOUNTED FROM DL1:    *** FINAL DISMOUNT ***
+ *** DL1:  -- DISMOUNT COMPLETE 
+
+>; at this point ATTACH RL1 RSX-11M_V3.2_RMSKIT.rl01
+>mou dl1:RMSKIT
+>pip db0:[*,*]/fo/cd/uf=dl1:[*,*]*.*
+>dmo dl1:
+DMO -- TT0:   DISMOUNTED FROM DL1:    *** FINAL DISMOUNT ***
+ *** DL1:  -- DISMOUNT COMPLETE 
+
+>; at this point ATTACH RL1 RSX-11M_V3.2_MAPSRC.rl01
+>mou dl1:MAPSRC
+>pip db0:[*,*]/fo/cd/uf=dl1:[*,*]*.*
+PIP -- OUTPUT FILE ALREADY EXISTS - NOT SUPERSEDED
+DB0:[1,1]KMCLP.BIN;1
+...
+>; Overwrite unmapped sources...
+>pip db0:[*,*]/fo/su/cd/uf=dl1:[*,*]*.*
+>dmo dl1:
+DMO -- TT0:   DISMOUNTED FROM DL1:    *** FINAL DISMOUNT ***
+ *** DL1:  -- DISMOUNT COMPLETE 
+</PRE></TABLE>
+<p>
+By intent, the MAPSRC disk is copied last.  We'll soon need it again for SYSGEN.  Also by intent, mapped source files that duplicated ones from the unmapped source disk were overwritten by the extra PIP command with the /su switch.
+
+<h2>SYSGEN Phase I</h2>
+Let's reboot the mapped baseline Executive for a clean start and begin SYSGEN.  Follow along in the System Generation and Management Guide.  I'll only comment on things not mentioned there.
+<p>
+I will choose to enable every executive option except the few ones that would never be used in the simulated environment.  Given that I am saving my answers, re-doing SYSGEN with a slightly altered selection is not difficult.  I would expect to re-run SYSGEN for applying patches, different options, or additional device support.
+<p>
+N is the default Y/N answer if just the [Enter] key is typed.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>ins $boo
+>boo [1,54]
+
+  RSX-11M V3.2 BL26   124K   MAPPED
+>RED DL:=SY:
+>RED DL:=LB:
+>MOU DL:RSXM26
+>@DL:[1,2]STARTUP
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: 25-apr-10 18:27
+>TIM 25-apr-10 18:27
+>* ENTER LINE WIDTH OF THIS TERMINAL [D D:132.]: 
+>SET /BUF=TI:132.
+>ACS SY:/BLKS=512.
+>;
+>; NOTE - The Baseline INDirect must be replaced by BIGIND with 
+>;      a priority of 10. for SYSGEN.
+>;
+>;  ie  >REM ...AT.
+>;      >INS $BIGIND/PRI=10.
+>;
+>@ <EOF>
+>rem ...at.
+>ins $bigind/pri=10.
+INS -- WARNING - PRIVILEGED TASK OVERMAPS I/O PAGE
+>@sysgen
+>;
+>; RSX-11M Ver. 3.2 BL26 System Generation 3.2.2d done on 25-APR-10 at 18:27:39
+>;
+>; Copyright (C) 1979 Digital Equipment Corporation, Maynard Mass.
+>;
+>; RL01 distribution kit
+>;
+>*  1. Inhibit MCR command lines (Type <ESC> for explanation)? [Y/N]:
+>*  2. Have you made a copy of the distribution kit? [Y/N]:y
+>*  3. Use saved or canned answer file for input responses? [Y/N]:
+>* 10. Save responses (i.e.: create SYSSAVED.DAT)? [Y/N]:y
+>* 11. UIC for SYSSAVED files if not [200,200]  [S]: 
+>* 12. UIC for SYSGEN command files if not [200,200] [S]: 
+>* 13. Clean up files from previous GENs? [Y/N]:
+>* 14. Device, when ready, for Executive sources (ddu:)  [S]: dl1:
+>;
+>MOU DL1:MAPSRC
+>ASN DL1:=LB:
+>INS SY:$PIP
+>PIP /FR
+
+DL0: HAS 3305. BLOCKS FREE, 6935. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 3305. BLOCKS
+
+>SET /UIC=[11,10]
+>;
+>; Target configuration
+>;
+>*  1. Processor (e.g.: 11/34, LSI-11) [S R:5-6]: 11/70
+>*  3. Generating RSX-11S? [Y/N]:
+>*  4. Memory size (in K-word blocks) [D R:32.-1920.]: 512
+>*  5. Mapped? [Y/N]:y
+>*  6. Any K-series laboratory devices? [Y/N]:
+>*  8. Floating point processor (FP-11) present? [Y/N]:y
+>* 10. If using KW11-P as system clock: number of intrps./sec. [D R:0.-1000.]: 
+>* 11. Line frequency:   A- 60 Hz    B- 50 Hz   [D: "A"] [S]: 
+>* 12. KW11-Y Watchdog timer support? [Y/N]:
+>* 13. Memory parity support? [Y/N]:y
+>* 14. Cache memory? [Y/N]:y
+>* 15. Highest interrupt vector (If 0 will be computed) [O R:0-774]: 
+>;     For device configuration: "*" Prints device table, "." Terminates inquiry
+>;     Enter devices and number of controllers for devices which require drivers
+>* 16. Devices [S]: *
+>;
+>;     Physical devices:
+>;    
+>;     AD- ad01-d a/d contr  AF- afc11 a/d contrlr AR- ar11 lab subsystem
+>;     CR- cr11/cm11 crd rdr CT- ta11/tu60 cass    DB- rp04/05/06 disk pack
+>;                                                 DD- tu58 cartridge dectape
+>;     DF- rf11 fixed disks  DK- rk11/rk03/rk05    DL- rl11/rl01/rl02 disk
+>;     DM- rk611/rk06 disks  DP- rp11/rp02/rp03    DR- rm02/rm03 disk drives
+>;     DS- rs/rs03/04 fx dsk DT- tc11/tu56 dectape DX- rx11/rx01 floppy disk
+>;                           DY- rx02 floppy disk  GR- vt11/vs60 graphics sys
+>;     IC- ics/icr11 contrlr IP- ip11/ip300 cntrlr IS- drs/dss11 modules
+>;     LA- lpa11 lab subsys  LP- lp/ls/lv/11 prntr LS- lps11 lab subsystems
+>;     MM- tu16/45/77/te16   MS- ts04 tape drive   MT- tm11/tu10/te10/ts03 tape
+>;     PP- paper tape punch                        PR- pr11 papertape reader
+>;     UD- udc11 uni contr   XB- da11-b uni links  XL- dl11-e async lines
+>;     XM- dmc11 inproc lnk  XP- dp11 sync inter   XQ- dq11 sync interface
+>;     XU- du11 sync inter   XW- dup11 sync interface
+>;
+>;     Non-physical devices: maximum of one "controller" specifiable
+>;    
+>;     CO- console driver    NL- the null device   TT- terminal driver
+>;    
+>;     Enter responses as: dev1=number controllers,dev2=number controllers, ...
+>;
+>;     Example: DK,DM=2,TT,NL (NOTE: No number of controllers implies one)
+>;
+>* 16. Devices [S]: db,dk,dl,lp,mm,pp,pr,co,nl,tt.
+>;
+>; Processor:11/70   Memory Size:512K,Mapped   System:RSX-11M
+>;
+>; Host configuration
+>;
+>*  1. Are you running SYSGEN standalone (on the baseline system)? [Y/N]:y
+>*  2. Is a line printer available? [Y/N]:y
+>*  4. Does the listing/map device have at least 120 columns? [Y/N]:y
+>*  5. Assembly listings device (ddu:) [D: "NL:"] [S]: 
+>*  6. Map device for Executive and device drivers (ddu:) [D: SY:] [S]: 
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>; Executive Options
+>;
+>;     Answer Y(ES) if the following support is desired
+>;
+>*  1. Will DBMS-11 be used? [Y/N]:y
+>;     Files-11 ACP support will be included
+>*  3. RMS record locking and placement control? [Y/N]:y
+>*  4. Non-resident tasks (task loader)? [Y/N]:y
+>*  5. Loadable task loader? [Y/N]:y
+>;     Memory management directives (PLAS) support will be included
+>;     Send/Receive by reference support will be included
+>*  8. Get mapping context directive? [Y/N]:y
+>;     Address checking support will be included
+>;     I/O rundown support will be included
+>* 11. Multi-user protection? [Y/N]:y
+>* 12. ANSI Magtape ACP? [Y/N]:y
+>* 13. On-line formatting (FMT) or on-line user-mode diagnostics? [Y/N]:y
+>* 14. Loadable device drivers? [Y/N]:y
+>* 15. Should the default for all applicable drivers be loadable? [Y/N]:y
+>;     AST support will be included
+>;     Cancel selective MARKTIMEs support will be included
+>* 17. Task termination and device not ready messages (TKTN)? [Y/N]:y
+>* 18. Power fail recovery? [Y/N]:
+>* 19. Install, request, and remove on exit? [Y/N]:y
+>* 20. Large (20K) Executive? [Y/N]:y
+>* 21. Logical device assignment? [Y/N]:y
+>* 22. Logging of device errors and timeouts? [Y/N]:y
+>* 23. Logging of undefined interrupts? [Y/N]:y
+>* 24. Logging of memory parity errors? [Y/N]:
+>* 25. Do you intend to include a user-written driver? [Y/N]:
+>* 28. Disk writecheck? [Y/N]:y
+>* 29. Executive Debugging Tool (XDT)? [Y/N]:y
+>* 30. Rotating pattern in data lights? [Y/N]:
+>* 31. Industrial network or DECnet? [Y/N]:y
+>* 32. Queue manager and queued print spooler? [Y/N]:y
+>* 33. Group global event flags? [Y/N]:y
+>;     For directives: "*" Prints table, "." Terminates inquiry, "%" Gets all
+>* 34. Enter code for directives [S]: %.
+>* 35. Number of pre-allocated QIO packets [D R:0.-15. D:5.]: 
+>* 36. Size of data transfer vector in words [D R:5.-33. D:33.]: 
+>* 37. Round-robin scheduling interval in ticks [D R:0.-1000. D:5.]: 
+>* 38. Highest priority class for consideration [D R:1.-249. D:150.]: 
+>* 39. Lowest priority class for consideration [D R:1.-150. D:1.]: 
+>* 40. Executive level disk swapping interval [D R:0.-5000. D:30.]: 
+>* 41. Swapping priority [D R:1.-20. D:5.]: 
+>* 42. Size of dynamic storage region (POOL) in words [D R:256.-16384. D:1024.]: 4096
+>* 43. Seconds between printer not ready messages [D R:0.-255. D:30.]: 
+>* 45. System crash register and stack dump device CSR [O R:0-177700 D:177564]: 
+>* 46. Checkpointing:             A- Yes    B- With system ckpnt. file    [S]: b
+>* 47. System cntrled partitions: A- Yes    B- With auto compaction (SHF) [S]: b
+>* 48. Dump analysis:             A- PANIC  B- Crash (CDA)                [S]: b
+>* 49. Output notification device CSR [O R:160000-177700 D:177564]: 
+>* 50. Memory dump device (ddu:) [S R:3-4]: sy:
+>;     SGN -- Valid devices: DT, DK, MT, MS, MM, DB, DM, DL, DD, & DR -- RETRY
+>* 50. Memory dump device (ddu:) [S R:3-4]: DB:
+>* 51. CSR address of dump device [O R:160000-177700 D:176700]: 
+>;
+>; Terminal driver options
+>;
+>*  1. Terminal driver desired (A/B/C/D, * prints table) [S]: *
+>;
+>;     Terminal drivers:  A- Tailorable half duplex
+>;                        B- Tailored half duplex (user-oriented)
+>;                        C- Full duplex
+>;                        D- Baseline half duplex
+>;
+>*  1. Terminal driver desired (A/B/C/D, * prints table) [S]: c
+>*  2. Unsolicited input timeout value in seconds [D R:0.-2540. D:120.]: 
+>;
+>;     Answer Y(ES) if the following support is desired
+>;
+>*  5. Task checkpointable during terminal input? [Y/N]:y
+>*  6. Unsolicited input character AST? [Y/N]:y
+>;     Breakthrough write support will be included
+>;     CTRL/R support will be included
+>* 10. Escape sequence handling? [Y/N]:y
+>* 11. Get multiple characteristics? [Y/N]:y
+>* 12. Set multiple characteristics? [Y/N]:y
+>* 13. Get terminal driver options? [Y/N]:y
+>* 17. Read after prompt? [Y/N]:y
+>* 20. CRT rubout support? [Y/N]:y
+>* 25. Hardware unrecoverable input error notification? [Y/N]:y
+>* 26. Device independent cursor positioning? [Y/N]:y
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>;     Thinking ...
+>;
+>; End of Executive option generation at 18:51:07 on 25-APR-10
+>;
+>; Peripheral configuration
+>;
+>;     Parameters  appearing  in  square  brackets  "[...]"  can  only be
+>;     specified  for  the  first  controller  of  a  particular  device.
+>;     Parameters appearing in parentheses "(...)" only need be specified
+>;     if   the  indicated  option  is  present  on  the  target  system.
+>;    
+>;     The   default  for  loadable  drivers  has  been  set  to  *TRUE*.
+>;     To override this setting enter R (resident) as the first parameter
+>;     for    the    first    controller   of   the   specified   device.
+>;    
+>; A/D and Laboratory devices: None specified
+>;
+>; Interprocessor communication devices: None specified
+>;
+>; Unit record devices: LP, PR, PP
+>;
+>; Enter [L/R,] vector, CSR, printer type
+>;              (,[KMC timeout count <0=no KMC>, KMC vector, KMC CSR]) for:
+>;
+>* 16. LP controller 0 [D: 200,177514,LA180,0,300,160130] [S]: ,,LP11-S
+>;
+>; Enter [L/R,] vector, CSR for: 
+>;
+>*  1. PP controller 0 [D: 74,177554]               [S]: 
+>;
+>*  1. PR controller 0 [D: 70,177550]               [S]: 
+>;
+>; Disks: DB, DK, DL
+>;
+>; Enter [L/R,] vector, CSR, number of drives, unit number of first drive,
+>;              [O=offset recovery support/NO=no support] for:
+>;
+>*  2. DB controller 0 [D: 254,176700,,0,O]         [S]: ,,4
+>* 52. Contr 0 unit 0. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 1. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 2. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 3. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>;
+>; Enter [L/R,] vector, CSR, highest unit number <0 to 7> for:
+>;
+>*  6. DK controller 0 [D: 220,177404]              [S]: ,,3
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. DL controller 0 [D: 160,174400]              [S]: ,,4
+>* 53. Contr 0 unit 0. is an RL01/RL02 [D: RL01]    [S]: 
+>* 53. Contr 0 unit 1. is an RL01/RL02 [D: RL01]    [S]: 
+>* 53. Contr 0 unit 2. is an RL01/RL02 [D: RL01]    [S]: RL02
+>* 53. Contr 0 unit 3. is an RL01/RL02 [D: RL01]    [S]: RL02
+>;
+>; Tapes: MM
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. MM controller 0 [D: 224,172440]              [S]: ,,2
+>* 51. MM controller 0 unit 0. formatter  [O R:0-7 D:0]: 
+>* 51. MM controller 0 unit 1. formatter  [O R:0-7 D:0]: 
+>;
+>; Non-physical (pseudo) devices: CO, TT, NL, TI, CL, LB, SY
+>;
+>; Enter [L/R,] terminal number to redirect to (TTn:) for:
+>;
+>* 18. CO controller 0 [D: 0]                       [S]: 
+>;
+>; Enter num. DL11's <ZL>, num. DH11's, num. DZ11's, num. DJ11's for:
+>;
+>* 20. The terminal driver  [D: 1,0,0,0]            [S]: ,,1
+>;
+>; Enter vector, CSR for:
+>;
+>* 21. ZL controller 0 [D: 60,177560]               [S]: 
+>;
+>; Enter vector, CSR, highest line number <0 to 7> [, answer speed] for:
+>;
+>* 24. DZ controller 0 [D: ,,,0]                    [S]: 300,160100,7
+>SET /UIC=[1,24] ! Creating TTDRVBLD.CMD
+>SET /UIC=[11,10]
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>;
+>; End of interrupt vector area has been set to 400
+>;
+>;
+>; Create Executive build files
+>;
+>PIP RSXMC.MAC=LB:RSXMC0.MAC/AP
+>;
+>; Assemble the Executive
+>;
+>PIP [11,24]/NV=RSXASM.CMD,RSXDRVASM.CMD
+>PIP RSXASM.CMD;0/DE,RSXDRVASM;0
+>REM PIP
+>ASN =LB:
+>LOA LP:
+>ASN DL1:=LB:
+>;
+>*  1. Do you wish to edit any of the Executive files? [Y/N]:
+>;
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>INS SY:$BIGMAC
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>;SET /COFFEEBREAK=TI: Start of Executive assembly at 18:59:20 on 25-APR-10
+>SET /UIC=[11,24]
+>MAC @RSXASM
+>;SET /NOCOFFEEBREAK=TI: Executive assembly ended at 19:02:35 on 25-APR-10
+>;
+>* EOX * Did the Executive assemble correctly? [Y/N]:y
+>;
+>; Assemble the device drivers
+>;
+>;SET /COFFEEBREAK=TI: Start of device drivers assembly at 19:03:08 on 25-APR-10
+>SET /UIC=[11,24]
+>MAC @RSXDRVASM
+>;SET /NOCOFFEEBREAK=TI: Device drivers assembly ended at 19:06:41 on 25-APR-10
+>;
+>* EOX * Did the device drivers assemble correctly? [Y/N]:y
+>;
+>REM MAC
+>;
+>; Prepare for task building
+>;
+>INS SY:$PIP
+>PIP RSX.OBS=*.OBJ
+>PIP *.OBJ;*/DE/NM
+>PIP RSX11M.OBJ/RE=RSX.OBS
+>PIP TTDRV.OBJ=*.TTY
+>PIP *.TTY;*/DE/NM
+>SET /UIC=[1,24]
+>PIP /NV=[11,10]RSXBLD.CMD
+>REM PIP
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section P-pause [S]: 
+>;
+>;
+>; End of SYSGEN phase I at 19:10:19 on 25-APR-10
+>;     -- To continue type: @[200,200]SYSGEN2
+>;
+>SET /UIC=[200,200]
+>@ <EOF>
+>
+</PRE></TABLE>
+
+<h2>SYSGEN Phase II</h2>
+The System Generation manual suggests that before starting the next phase, you should delete unneeded source files to prevent running out of disk space.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>set /uic=[11,10]                                 
+>run $pip
+>
+PIP>dl1:xbdrv.mac;*/de
+PIP>dl1:xpdrv.mac;*/de
+PIP>dl1:xqdrv.mac;*/de
+PIP>dl1:xudrv.mac;*/de
+PIP>dl1:xwdrv.mac;*/de
+PIP>dl1:icdrv.mac;*/de
+PIP>dl1:ipdrv.mac;*/de
+PIP>dl1:isdrv.mac;*/de
+PIP>dl1:uddrv.mac;*/de
+PIP>dl1:lsdrv.mac;*/de
+PIP>dl1:ladrv.mac;*/de
+PIP>dl1:ardrv.mac;*/de
+PIP>^Z
+</PRE></TABLE>
+<p>
+Now run the phase II command procedure.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>set /uic=[200,200]
+>@sysgen2
+>;
+>; RSX-11M Version  3.2 System Generation Phase II started 25-APR-10 at 19:29:22
+>;
+>; Copyright (C) 1979 Digital Equipment Corporation, Maynard Mass.
+>;
+>*  1. In what UIC is SGNPARM.CMD if not [200,200] [S]: 
+>;
+>; RL01 distribution kit SYSGEN versions 3.2.2d / 2:3.2.2d  for RSX11M BL26
+>;
+>; Continuation from SYSGEN phase I done on 25-APR-10 at 19:07:02
+>;
+>*  2. Expanded comments desired for SYSGEN phase II? [Y/N]:
+>*  4. Is SYSGEN still running stand-alone? [Y/N]:y
+>*  5. If not in DL1: enter object files device when ready (ddu:) [S]: 
+>;
+>MOU DL1:MAPSRC
+MOU -- OTHER VOLUME MOUNTED - DL1:
+>ASN DL1:=LB:
+>ASN SY:=TK:
+>INS SY:$PIP
+>PIP /FR
+
+DL0: HAS 3022. BLOCKS FREE, 7218. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 2839. BLOCKS
+
+>*  6. Have you already built the libraries, the Exec, and the loadable drivers? [Y/N]:
+>;
+>; Start of Executive and driver build phase at 19:30:23 on 25-APR-10
+>;
+>;
+>; Create system libraries at 19:30:23 on 25-APR-10
+>;
+>INS $LBR
+>SET /UIC=[1,1]
+>PIP ANSLIB.OLB/NV=SYSLIB.OLB
+>LBR ANSLIB/RP=LB:FCSMTA
+MODULE "ANSPAD" REPLACED
+MODULE "ASSLUN" REPLACED
+MODULE "BIGBUF" REPLACED
+MODULE "CLOSE " REPLACED
+MODULE "CREATE" REPLACED
+MODULE "DIRECT" REPLACED
+MODULE "GET   " REPLACED
+MODULE "GETSQ " REPLACED
+MODULE "OPEN  " REPLACED
+MODULE "OPFID " REPLACED
+MODULE "OPFNB " REPLACED
+MODULE "POINT " REPLACED
+MODULE "PUT   " REPLACED
+MODULE "PUTSQ " REPLACED
+MODULE "RDWAIT" REPLACED
+MODULE "RETADR" REPLACED
+MODULE "RWBLK " REPLACED
+MODULE "WATSET" REPLACED
+MODULE "WTWAIT" REPLACED
+
+>SET /UIC=[1,24]
+>PIP RSX11M.OLB;*/DE/NM,TTDRV;*
+>LBR RSX11M/CR:80.:640.:256.=[11,24]RSX11M.OBJ
+>LBR TTDRV/CR:52.:256.:64.=[11,24]TTDRV.OBJ
+>PIP LB:/NV=LB:MCR.OLB
+>LBR LB:MCR/RP=LB:MCRTTFD
+MODULE "SDSOV " REPLACED
+MODULE "SETOV " REPLACED
+MODULE "SPROV " REPLACED
+
+>REM PIP
+>INS SY:$BIGTKB
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>;
+>; Taskbuild the Executive and the terminal driver at 19:30:47 on 25-APR-10
+>;
+>INS SY:$PIP
+>PIP [1,34]*.*;*/DE/NM
+>REM PIP
+>TKB @RSXBLD
+>;
+>* EOX * Did the Executive build successfully? [Y/N]:y
+>;
+>SET /UIC=[1,54]
+>INS SY:$PIP
+>PIP LB:/NV=RSX11M.STB
+>REM PIP
+>SET /UIC=[1,24]
+>TKB @TTDRVBLD
+>;
+>* EOX * Did the terminal driver build successfully? [Y/N]:y
+>;
+>INS SY:$PIP
+>* 10. List Executive map? [Y/N]:y
+>;
+>PIP LP:=SY:[1,34]RSX11M.MAP
+>;
+>; Build Loadable drivers
+>;
+>*  6. Device for driver's maps [D: NL:] [S]: 
+>*  9. Build all selected loadable drivers into DRVPAR? [Y/N]:y
+>;
+>TKB @[200,200]CODRVBLD
+>PIP [200,200]CODRVBLD.CMD;*/DE
+>PIP [1,54]CODRV.STB/TR
+>TKB @[200,200]DBDRVBLD
+>PIP [200,200]DBDRVBLD.CMD;*/DE
+>PIP [1,54]DBDRV.STB/TR
+>TKB @[200,200]DKDRVBLD
+>PIP [200,200]DKDRVBLD.CMD;*/DE
+>PIP [1,54]DKDRV.STB/TR
+>TKB @[200,200]DLDRVBLD
+>PIP [200,200]DLDRVBLD.CMD;*/DE
+>PIP [1,54]DLDRV.STB/TR
+>TKB @[200,200]LPDRVBLD
+>PIP [200,200]LPDRVBLD.CMD;*/DE
+>PIP [1,54]LPDRV.STB/TR
+>TKB @[200,200]MMDRVBLD
+>PIP [200,200]MMDRVBLD.CMD;*/DE
+>PIP [1,54]MMDRV.STB/TR
+>TKB @[200,200]PPDRVBLD
+>PIP [200,200]PPDRVBLD.CMD;*/DE
+>PIP [1,54]PPDRV.STB/TR
+>TKB @[200,200]PRDRVBLD
+>PIP [200,200]PRDRVBLD.CMD;*/DE
+>PIP [1,54]PRDRV.STB/TR
+>;
+>; End of library, Executive and driver build phase at 19:31:47 on 25-APR-10
+>;
+>; Start task building privileged tasks at 19:31:47 on 25-APR-10
+>;
+>* 11. FCP desired  (Type <ESC> for explanation)  [D: MIDDLE] [S]: plas
+>* 13. Build the unprivileged queue manager utilities? [Y/N]:y
+>* 14. Build the task PMD? [Y/N]:y
+>* 15. Build RMDEMO? [Y/N]:y
+>;
+>;     Note that the following task-builds will be executed for your system:
+>;
+>;       BOOBLD    DMOBLD    COTBLD    FCPPRO2BLD INDBLD    INIBLD    INSBLD    
+>;       MCRMUBLD  MOUBLD    QMGBLD    QMGCLIBLD QMGPRTBLD LPPBLD    F11MSGBLD 
+>;       MTABLD    SAVBLD    TKNBLD    UFDBLD    LOABLD    UNLBLD    PMDBLD    
+>;       RMDBLD    SHFBLD    ACNTBLD   BYEBLD    HELBLD    BROBLD    SHUTUPBLD 
+>;       ACSBLD    ERFBLD    ERLBLD    
+>;
+>* 17. Edit any privileged task build files? [Y/N]:
+>* 18. Map device for privileged tasks (ddu:) [D: NL:] [S]: 
+>;
+>ASN NL:=MP:
+>ASN LB:=SY:
+>ASN =LB:
+>ASN =SY:
+>ASN DL1:=SY:
+>ASN DL0:=LB:
+>TKB @BOOBLD
+>TKB @DMOBLD
+>TKB @COTBLD
+>TKB @FCPRO2BLD
+>TKB @INDBLD    ! GENERATING SMALL INDIRECT
+>TKB @INIBLD
+>TKB @INSBLD
+>TKB @MCRMUBLD
+>TKB @MOUBLD
+>TKB @QMGBLD
+>TKB @QMGCLIBLD
+>TKB @QMGPRTBLD
+>TKB @LPPBLD
+>TKB @F11MSGBLD
+>TKB @MTABLD
+>TKB @SAVBLD
+>TKB @TKNBLD
+>TKB @UFDBLD
+>TKB @LOABLD
+>TKB @UNLBLD
+>TKB @PMDBLD
+>TKB @RMDBLD
+>TKB @SHFBLD
+>TKB @ACNTBLD
+>TKB @BYEBLD
+>TKB @HELBLD
+>TKB @BROBLD
+>TKB @SHUTUPBLD
+>TKB @ACSBLD
+>TKB @ERFBLD
+>TKB @ERLBLD
+>;
+>* EOX * Did the privileged tasks build successfully? [Y/N]:y
+>;
+>; End of privileged task builds at 19:38:42 on 25-APR-10
+>;
+>REM TKB
+>ASN LB:=SY:
+>ASN =LB:
+>ASN =SY:
+>ASN DL0:=SY:
+>ASN DL1:=LB:
+>SET /UIC=[1,54]
+>PIP /FR
+
+DL0: HAS 1235. BLOCKS FREE, 9005. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 994. BLOCKS
+
+>;
+>;     SGN -- SYSGEN will now pause to allow you to create your
+>;            RSX11M.SYS file using the following example.  Ideally
+>;            your system it should occupy the same number of blocks
+>;            as indicated in the example.
+>;
+>;            PIP RSX11M.SYS/NV/CO/BL:498.=RSX11M.TSK
+
+AT. -- PAUSING. TO CONTINUE TYPE "RES ...AT."
+
+>
+</PRE></TABLE>
+<p>
+I think it is a bug that, after question 19, VMR cannot find F11MSG to install that task into the new Executive.  Maybe if I had used autopatch this would be fixed.  F11MSG is optional, so I will ignore this problem at present.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>PIP RSX11M.SYS/NV/CO/BL:498.=RSX11M.TSK
+>RES ...AT.
+>
+
+AT. -- CONTINUING
+>REM PIP
+>;
+>* 19. Edit SYSVMR.CMD? [Y/N]:
+>;
+>INS SY:$BOO;-1
+>INS $VMR;-1
+>ASN SY:=LB:
+>VMR
+ENTER FILENAME: @sysvmr
+VMR -- INSTALLED TASKS MAY NO LONGER FIT IN PARTITION
+SET /TOP=DRVPAR:-*
+VMR -- FILE NOT FOUND
+INS F11MSG      ! INSTALL MAGTAPE ERROR PROCESSOR
+POOL=1200:7312.:07312.
+LDRPAR 117734 00120000 00002400 MAIN TASK
+TTPAR  117420 00122400 00040000 MAIN TASK
+DRVPAR 117074 00162400 00016100 MAIN SYS 
+       117030 00162400 00002100 SUB  DRIVER - DB:
+       116730 00164500 00001000 SUB  DRIVER - DK:
+       116630 00165500 00002000 SUB  DRIVER - DL:
+       116530 00167500 00001100 SUB  DRIVER - LP:
+       116430 00170600 00003700 SUB  DRIVER - MM:
+       116330 00174500 00000500 SUB  DRIVER - PP:
+       116230 00175200 00000300 SUB  DRIVER - PR:
+       116130 00175500 00003000 SUB  DRIVER - CO:
+SYSPAR 116064 00200500 00010000 MAIN TASK
+FCPPAR 116020 00210500 00047300 MAIN SYS 
+GEN    115754 00260000 03520000 MAIN SYS 
+...LDR 11     117634 LDRPAR 248. 00002400 LB0:-00016703 FIXED
+TKTN   03.94  112454 SYSPAR 248. 00010000 LB0:-00020270
+...RMD V01    114754 GEN    225. 00040000 LB0:-00021327
+MTAACP 0010   114154 GEN    200. 00013500 LB0:-00021062
+...DMO 22.00  114454 GEN    160. 00040000 LB0:-00017331
+MCR... 02.01  113354 SYSPAR 160. 00010000 LB0:-00020227
+...MOU 22.15  113054 GEN    160. 00040000 LB0:-00020170
+...MCR 01     112554 GEN    160. 00020000 LB0:-00020366
+F11ACP M0320  115654 FCPPAR 149. 00047300 LB0:-00017572
+COT... 00.01  115554 GEN    145. 00040000 LB0:-00017441
+PMD... 05     113554 GEN    140. 00020000 LB0:-00021442
+SHF... 04     112654 SYSPAR 105. 00010000 LB0:-00020317
+...INS 04     113654 GEN    100. 00040000 LB0:-00017645
+...SAV 04.22  112754 GEN    100. 00040000 LB0:-00021231
+...UFD V0410  112354 GEN    100. 00040000 LB0:-00020300
+QMG... 01.04  115454 GEN     75. 00040000 LB0:-00020566
+PRT... 01.01  115154 GEN     70. 00040000 LB0:-00020253
+LPP0   01.06  115054 GEN     70. 00040000 LB0:-00020776
+...AT. 04.25  114054 GEN     65. 00040000 LB0:-00020020
+...ERF 02     114354 GEN     61. 00040000 LB0:-00020342
+...INI 20.01  113754 GEN     60. 00040000 LB0:-00020124
+...QUE 1.0    115354 GEN     50. 00040000 LB0:-00020646
+...PRI 1.0    115254 GEN     50. 00040000 LB0:-00020646
+...ACS 01     114654 GEN     50. 00040000 LB0:-00020323
+...BOO 03.4   114554 GEN     50. 00040000 LB0:-00017413
+ERRLOG 02     114254 GEN     50. 00040000 LB0:-00021756
+...LOA 03.3   113454 GEN     50. 00040000 LB0:-00021272
+...HEL 01.24  113254 GEN     50. 00040000 LB0:-00021633
+...BYE 02.2   113154 GEN     50. 00004000 LB0:-00020354
+...UNL 02.8   112254 GEN     50. 00040000 LB0:-00020535
+LP0:    LOADED
+PP0:    LOADED
+PR0:    LOADED
+DB0:    LOADED
+DB1:    LOADED
+DB2:    LOADED
+DB3:    LOADED
+DK0:    LOADED
+DK1:    LOADED
+DK2:    LOADED
+DK3:    LOADED
+DL0:    LOADED
+DL1:    LOADED
+DL2:    LOADED
+DL3:    LOADED
+MM0:    LOADED
+MM1:    LOADED
+CO0:  TT0:
+TT0:    LOADED
+TT1:    LOADED
+TT2:    LOADED
+TT3:    LOADED
+TT4:    LOADED
+TT5:    LOADED
+TT6:    LOADED
+TT7:    LOADED
+TT10:    LOADED
+NL0:  
+TI0:  
+CL0:  TT0:
+LB0:  DB0:
+SY0:  DB0:
+VMR>^Z
+
+>; 
+>;     When the indirect file exits, boot in your target system,
+>;     set the date and time, and save the system with a bootstrap.
+>;     When your system reboots itself, purge the old task files.
+>; 
+>;
+>;     An alternate version of SYSLIB called ANSLIB has been created
+>;     on the RSXM26 disk to take into account ANSI support and Big-buffering.
+>;
+>;     Since you have selected ANSI magtape support you may want to
+>;     rebuild PIP and other utilities in SYSGEN phase III to take
+>;     advantage of ANSI support.  Note this will cause an increase 
+>;     in the size of the utility compared with the non-ANSI version.
+>;
+>;     Don't forget to create accounts after saving your system
+>REM LBR
+>ASN =LB:
+>;
+>; End of SYSGEN phase II at 19:43:36 on 25-APR-10
+>;
+>@ <EOF>
+>
+</PRE></TABLE>
+<p>
+When running the newly built Executive for the first time, it stops at an XDT breakpoint.  Typing ";g" allows it to proceed.
+<p>
+I enable lowercase on all the terminals.  Ideally this setting would have been done by SYSVMR.CMD.  Seeing echoed input in lowercase helps to distinguish it from system output.
+<p>
+Then the Executive is saved with it's current settings and the disk boot block is over-written so it loads this Executive.  The Executive reboots, showing all 512KW of memory is usable, thus completing this phase of SYSGEN.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>boo dl:[1,54]
+XDT: 26
+
+XDT>;g
+RSX11M V3.2 BL26  
+
+
+>SET /LOWER=TT0:
+>set /lower=tt1:
+>set /lower=tt2:
+>set /lower=tt3:
+>set /lower=tt4:
+>set /lower=tt5:
+>set /lower=tt6:
+>set /lower=tt7:
+>set /lower=tt10:
+>
+>red dl:=sy:
+>red dl:=lb:
+>mou dl:rsxm26
+>@[1,2]startup
+>* Enter date and time ( dd-mmm-yy hh:mm ) [S]: 25-apr-10 19:53
+>TIM 25-apr-10 19:53
+>@ <EOF>
+>tim
+19:53:09 25-APR-10
+>set /uic=[1,54]
+>run $pip
+PIP>[1,54]*.*/pu
+PIP>/fr
+
+DL0: HAS 1228. BLOCKS FREE, 9012. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 496. BLOCKS
+
+PIP>^Z
+>
+>sav/wb
+DMO -- TT0:   DISMOUNTED FROM DL0:    *** FINAL DISMOUNT ***
+ *** DL0:  -- DISMOUNT COMPLETE 
+
+>
+
+  RSX-11M V3.2 BL26   512K   MAPPED
+>RED DL:=SY:
+>RED DL:=LB:
+>MOU DL:RSXM26
+>@DL:[1,2]STARTUP
+>* Enter date and time ( dd-mmm-yy hh:mm ) [S]: 19:58
+>TIM 19:58
+>@ <EOF>
+>
+>tim
+19:58:05 25-APR-10
+>
+</PRE></TABLE>
+<p>
+A clean OS shutdown is done via the shutup utility.  This halts the processor after closing down system activity.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>run $shutup
+
+RSX11M SHUT DOWN PROGRAM
+
+ENTER MINUTES TO WAIT BEFORE SHUTDOWN: 0
+OK TO SHUTDOWN? [Y/N]: y
+ALL FURTHER LOGINS ARE DISABLED
+
+25-APR-10 20:54 PLEASE FINISH UP, 0  MINUTES BEFORE SHUTDOWN
+
+@LB:[1,2]SHUTUP
+
+AT. -- FILE NOT FOUND
+@LB:[1,2]SHUTUP
+>
+ DMO DL0:/DEV
+DMO -- SYSTEM DISMOUNTED FROM DL0:    *** FINAL DISMOUNT ***
+ *** DL0:  -- DISMOUNT COMPLETE 
+
+>
+</PRE></TABLE>
+<h2>Copy the Generated System to RP06</h2>
+Boot from RL0, hopefully for the last time.  Then send full directory listings to the line printer.  Searching the listings for today's date, the files to be copied are identified.  And those files are copied.
+<p>
+The desired terminal settings are added to SYSVMR.CMD and that file is used to create a bootable DB:RSX11M.SYS.  The F11MSG error has been fixed by picking up that task file from the MAPSRC disk.
+<p>
+The new Executive is booted and saved with a boot block.  Then it is cleanly shutdown.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+  RSX-11M V3.2 BL26   512K   MAPPED
+>RED DL:=SY:
+>RED DL:=LB:
+>MOU DL:RSXM26
+>@DL:[1,2]STARTUP
+>* Enter date and time ( dd-mmm-yy hh:mm ) [S]: 21:12
+>TIM 21:12
+>@ <EOF>
+>tim
+21:12:05 25-APR-10
+>mou dl1:mapsrc
+>mou db:system
+>ins $pip
+>set /uic=[1,1]
+>
+>; Print directory listings to see which files were created
+>; or modified today by SYSGEN...
+>pip lp:=dl1:[*,*]/fu
+>pip lp:=dl:[*,*]/fu
+>
+>; Now copy the new files...
+>pip db:[*,*]/cd/fo/nv/uf=dl1:[1,24]mcr.olb
+>pip db:[*,*]/cd/fo/nv/uf=dl1:[1,24]syspar.cmd
+>pip db:[*,*]/cd/fo/nv/uf=dl1:[1,54]f11msg.tsk
+>pip db:[*,*]/cd/fo/nv/uf=dl1:[1,54]f11msgstb.stb
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,1]anslib.olb
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,2]login.txt
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,2]help.hlp
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,24]*.*
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,34]*.*
+>pip db:[*,*]/cd/fo/nv/uf=dl:[1,54]*.*
+>pip db:[*,*]/cd/fo/nv/uf=dl:[11,10]*.*
+>pip db:[*,*]/cd/fo/nv/uf=dl:[11,24]*.*
+>pip db:[*,*]/cd/fo/nv/uf=dl:[200,200]syssaved.dat
+>pip db:[*,*]/cd/fo/nv/uf=dl:[200,200]sgnparm.cmd
+>
+>pip db:[1,54]sysvmr.cmd/fo=ti:/ap
+set /lower=tt0:
+set /lower=tt1:
+set /lower=tt2:
+set /lower=tt3:
+set /lower=tt4:
+set /lower=tt5:
+set /lower=tt6:
+set /lower=tt7:
+set /lower=tt10:
+^Z
+>
+>set /uic=[1,54]
+>pip db:rsx11m.sys/co/nv/bl:498.=rsx11m.tsk
+>pip db:[*,*]*.*/pu
+>ins $vmr
+>asn db:=sy:
+>asn db:=lb:
+>vmr @sysvmr
+VMR -- INSTALLED TASKS MAY NO LONGER FIT IN PARTITION
+SET /TOP=DRVPAR:-*
+POOL=1200:7280.:07280.
+LDRPAR 117734 00120000 00002400 MAIN TASK
+TTPAR  117420 00122400 00040000 MAIN TASK
+DRVPAR 117074 00162400 00016100 MAIN SYS 
+       117030 00162400 00002100 SUB  DRIVER - DB:
+       116730 00164500 00001000 SUB  DRIVER - DK:
+       116630 00165500 00002000 SUB  DRIVER - DL:
+       116530 00167500 00001100 SUB  DRIVER - LP:
+       116430 00170600 00003700 SUB  DRIVER - MM:
+       116330 00174500 00000500 SUB  DRIVER - PP:
+       116230 00175200 00000300 SUB  DRIVER - PR:
+       116130 00175500 00003000 SUB  DRIVER - CO:
+SYSPAR 116064 00200500 00010000 MAIN TASK
+FCPPAR 116020 00210500 00047300 MAIN SYS 
+GEN    115754 00260000 03520000 MAIN SYS 
+...LDR 11     117634 LDRPAR 248. 00002400 LB0:-00067126 FIXED
+TKTN   03.94  112354 SYSPAR 248. 00010000 LB0:-00070574
+...RMD V01    114754 GEN    225. 00040000 LB0:-00070756
+F11MSG V0010  114154 GEN    200. 00040000 LB0:-00007720
+MTAACP 0010   114054 GEN    200. 00013500 LB0:-00070354
+...DMO 22.00  114454 GEN    160. 00040000 LB0:-00067260
+MCR... 02.01  113254 SYSPAR 160. 00010000 LB0:-00067721
+...MOU 22.15  112754 GEN    160. 00040000 LB0:-00070063
+...MCR 01     112454 GEN    160. 00020000 LB0:-00067745
+F11ACP M0320  115654 FCPPAR 149. 00047300 LB0:-00067375
+COT... 00.01  115554 GEN    145. 00040000 LB0:-00067275
+PMD... 05     113454 GEN    140. 00020000 LB0:-00070707
+SHF... 04     112554 SYSPAR 105. 00010000 LB0:-00071057
+...INS 04     113554 GEN    100. 00040000 LB0:-00067656
+...SAV 04.22  112654 GEN    100. 00040000 LB0:-00070523
+...UFD V0410  112254 GEN    100. 00040000 LB0:-00070604
+QMG... 01.04  115454 GEN     75. 00040000 LB0:-00070112
+PRT... 01.01  115154 GEN     70. 00040000 LB0:-00070264
+LPP0   01.06  115054 GEN     70. 00040000 LB0:-00070270
+...AT. 04.25  113754 GEN     65. 00040000 LB0:-00067510
+...ERF 02     114354 GEN     61. 00040000 LB0:-00064021
+...INI 20.01  113654 GEN     60. 00040000 LB0:-00067614
+...QUE 1.0    115354 GEN     50. 00040000 LB0:-00070165
+...PRI 1.0    115254 GEN     50. 00040000 LB0:-00070165
+...ACS 01     114654 GEN     50. 00040000 LB0:-00071266
+...BOO 03.4   114554 GEN     50. 00040000 LB0:-00067232
+ERRLOG 02     114254 GEN     50. 00040000 LB0:-00071305
+...LOA 03.3   113354 GEN     50. 00040000 LB0:-00070613
+...HEL 01.24  113154 GEN     50. 00040000 LB0:-00071162
+...BYE 02.2   113054 GEN     50. 00004000 LB0:-00071154
+...UNL 02.8   112154 GEN     50. 00040000 LB0:-00070660
+LP0:    LOADED
+PP0:    LOADED
+PR0:    LOADED
+DB0:    LOADED
+DB1:    LOADED
+DB2:    LOADED
+DB3:    LOADED
+DK0:    LOADED
+DK1:    LOADED
+DK2:    LOADED
+DK3:    LOADED
+DL0:    LOADED
+DL1:    LOADED
+DL2:    LOADED
+DL3:    LOADED
+MM0:    LOADED
+MM1:    LOADED
+CO0:  TT0:
+TT0:    LOADED
+TT1:    LOADED
+TT2:    LOADED
+TT3:    LOADED
+TT4:    LOADED
+TT5:    LOADED
+TT6:    LOADED
+TT7:    LOADED
+TT10:    LOADED
+NL0:  
+TI0:  
+CL0:  TT0:
+LB0:  DB0:
+SY0:  DB0:
+>
+>boo db:[1,54]
+XDT: 26
+
+XDT>;g
+RSX11M V3.2 BL26  
+
+
+>
+ red db:=sy:
+>red db:=lb:
+>mou db:system
+>@[1,2]startup
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: 23:20
+>TIM 23:20
+>* ENTER LINE WIDTH OF THIS TERMINAL [D D:132.]: 
+>SET /BUF=TI:132.
+>ACS SY:/BLKS=512.
+>;
+>; NOTE - The Baseline INDirect must be replaced by BIGIND with 
+>;      a priority of 10. for SYSGEN.
+>;
+>;  ie  >REM ...AT.
+>;      >INS $BIGIND/PRI=10.
+>;
+>@ <EOF>
+>tim
+23:20:11 29-APR-74
+>tim 25-apr-10 23:21
+>tim
+23:21:02 25-APR-10
+>sav/wb
+SAV -- CHECKPOINT FILE STILL IN USE ON DB0:
+>acs sy:/blks=0.
+ACS -- CHECKPOINT FILE NOW INACTIVE
+>sav/wb
+DMO -- TT0:   DISMOUNTED FROM DB0:    *** FINAL DISMOUNT ***
+ *** DB0:  -- DISMOUNT COMPLETE 
+
+>
+
+  RSX-11M V3.2 BL26   512K   MAPPED
+>RED DB:=SY:
+>RED DB:=LB:
+>MOU DB:SYSTEM
+>@DB:[1,2]STARTUP
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: ^Z
+>@ <EOF>
+>run $shutup
+
+RSX11M SHUT DOWN PROGRAM
+
+ENTER MINUTES TO WAIT BEFORE SHUTDOWN: 0
+OK TO SHUTDOWN? [Y/N]: y
+ALL FURTHER LOGINS ARE DISABLED
+
+25-APR-10 23:21 PLEASE FINISH UP, 0  MINUTES BEFORE SHUTDOWN
+
+@LB:[1,2]SHUTUP
+
+AT. -- FILE NOT FOUND
+@LB:[1,2]SHUTUP
+>
+ DMO DB0:/DEV
+DMO -- SYSTEM DISMOUNTED FROM DB0:    *** FINAL DISMOUNT ***
+ *** DB0:  -- DISMOUNT COMPLETE 
+
+>
+</PRE></TABLE>
+<h2>Multi-User System Administration</h2>
+The final phase of SYSGEN is optional.  For now, the most useful thing is to set up user accounts and allow login via CRT for convenient file editing.
+<p>
+In the system interactions that follow, boot and shutdown of the system will not be shown.  You can assume the system was booted from RP0: and RP1: has the disk for user file directories attached.
+<p>
+First initialize DB1:, the disk for user file directories.  Although not shown here, commands to set DB1: as a public device and to mount that disk at system boot will be added to DB:[1,2]STARTUP.CMD.
+<p>
+Then the system-wide account file is created.  Finally a privileged account (with group less than 11) is created for my use.
+<p>
+<TABLE cellpadding=5><CAPTION><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+>set /uic=[1,1]
+>ini db1:user01
+INI -- DEVICE NOT ALLOCATED TO THIS TERMINAL - DB1:
+>all db1:
+>ini db1:user01
+INI -- NO BAD BLOCK DATA FOUND
+>dea db1:
+>set /pub=db1:
+>mou db1:user01
+>
+>set /uic=[1,2]
+>run $acnt
+INS -- NOT ENOUGH APRS FOR TASK IMAGE
+>
+>;??? Try running with a smaller task extension than
+>; ?? what is in [1,24]ACNTBLD.CMD
+>run $acnt/inc=2000.
+INS -- WARNING - PRIVILEGED TASK OVERMAPS I/O PAGE
+ * ACCOUNT FILE MAINTENANCE PROGRAM *
+OPTIONS ARE: A - ADD, C - CREATE FILE, D - DELETE, E - EXAMINE,
+L - LIST, M - MODIFY, S - SORT,  CTRL/Z - EXIT
+ENTER OPTION: c
+ENTER MAXIMUM NUMBER OF ACCOUNTS: 20
+OPTIONS ARE: A - ADD, C - CREATE FILE, D - DELETE, E - EXAMINE,
+L - LIST, M - MODIFY, S - SORT,  CTRL/Z - EXIT
+ENTER OPTION: a
+ENTER ACCOUNT OR <ESC> FOR OPTIONS ( N,N ): 7,77
+PASSWORD ( <=6 CHARS. ): bob
+DEFAULT SYSTEM DEVICE ( DDU ): db1:
+ACNT -- INVALID DEFAULT DEVICE NAME
+DEFAULT SYSTEM DEVICE ( DDU ): db1
+FIRST NAME ( <=12 CHARS. ): Robert
+LAST NAME ( <=14 CHARS. ): Evans
+UFD DB01:[007,077]
+>
+ENTER ACCOUNT OR <ESC> FOR OPTIONS ( N,N ): 
+OPTIONS ARE: A - ADD, C - CREATE FILE, D - DELETE, E - EXAMINE,
+L - LIST, M - MODIFY, S - SORT,  CTRL/Z - EXIT
+ENTER OPTION: ^Z
+OPERATION COMPLETE
+</PRE></TABLE>
+<p>
+Now I can login to any other terminal.  First I open a terminal window on my Linux desktop.  Then from that window I telnet to SIMH.  Finally, I log into RSX.
+<p>
+<TABLE border=3 cellpadding=5><CAPTION><em>VT100 Terminal Window</em></CAPTION><TD><PRE>
+$ telnet localhost 10001
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+
+Connected to the PDP-11 simulator DZ device, line 0
+
+
+>hel evans/bob
+
+        RSX-11M BL26   MULTI-USER SYSTEM
+
+GOOD EVENING
+26-APR-10 22:52 LOGGED ON TERMINAL TT1:
+
+Welcome to RSX-11M V3.2 timesharing
+ 
+>@LOGIN.CMD
+>set /lower=ti:
+>set /buf=ti:80.
+>set /crt=ti:
+>set /escseq=ti:
+>set /vt100=ti:
+>set /fdx=ti:
+>set /typeahead=ti:
+>set /ebc=ti:
+>set /wrap=ti:
+>@ <EOF>
+>
+</PRE></TABLE>
+<p>
+My personal LOGIN.CMD sets this to be a VT100 type terminal.  But when I tried to run RMDEMO, the screen output was jumbled up.  Running the xterm with logging (-l) and then dumping the logfile showed that VT52 escape sequences were being used instead of VT100 escape sequences.  Probably there's something wrong in my terminal settings.  Maybe the VT100 support has a bug; I think this was the first release of RSX-11M with VT100 support.
+<p>
+Fortunately, if I use an xterm to connect to the simulator, the following command line can be used to invoke VT52 emulation.
+<CENTER><TABLE cellpadding=5><TD><PRE>
+xterm +sb -ti vt52 -e 'telnet localhost 10001'
+</PRE></TABLE></CENTER>
+And with the VT52 emulation, RMDEMO correctly displays the system status as shown below.
+<p>
+<TABLE border=3 cellpadding=5><CAPTION><em>RMDEMO in a VT52 Terminal Window</em></CAPTION><TD><PRE>
+RSX-11M V3.2 BL26      512K                    27-APR-10 21:15:12
+*IDLE*  POOL=6800.:6842.:7.     FREE=SY0:138244. DB1:330086.
+             6784.:6842.:9.          DB2:DMO     DB3:DMO             PARS
+IN:  .T CF  .  .     T
+5    .T O1  .  .     T                                              LDRPAR:T
+48K  .: :1  .  .     2                                              TTPAR :T
+OUT: L   A  R  M                                                    DRVPAR:D
+0    D   C  M  A                                                    SYSPAR:T
+0K   R   P  D  C                                                    FCPPAR:D
+     >-))-><><-->  <-->                                             GEN   :D
+0*******32******64******96******128*****160*****192*****224*****
+E-P--T-DD--D----------------------------------------------------
+----------------------------------------------------------------
+256*****288*****320*****352*****384*****416*****448*****480*****
+
+
+
+
+                                                                    ERRSEQ
+                                                                    0.
+</PRE></TABLE>
+
+<h2>SYSGEN Phase III</h2>
+Before starting phase III, The RLUTIL disk gets attached to RL2.  Since we are now using the generated Executive, all devices may be used.
+<p>
+<TABLE><CAPTION cellpadding=5><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
+This is just a placeholder, as
+I have not done Sysgen III yet.
+</PRE></TABLE>
+
+</body>
+</html>

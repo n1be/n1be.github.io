@@ -1,0 +1,282 @@
+<!-- vim: autoindent expandtab ruler tabstop=4 sw=4 sts=4 laststatus=2
+-->
+
+
+<h1>Headless Raspberry Pi setup (Raspbian Stretch) from a Linux PC:</h1>
+
+<p>This page describes the initial setup, installation and configuration
+of software on a Raspberry Pi for &ldquo;embedded&rdquo; use.  Since there is no
+monitor or keyboard, the Pi will be managed remotely via the network.
+Also, Raspbian Lite is installed to save space on the SD card and to
+free up system resources.</p>
+
+<p>These links take you to the various setup activities.</p>
+
+<ol>
+<li><a href="#SSHClientSetup">Generate an SSH key pair</a></li>
+<li><a href="#SDHCSetup">Download Raspbian to an SDHC card</a></li>
+<li><a href="#RaspiConfig">Configure Raspbian</a></li>
+</ol>
+
+
+<hr /><a name="SSHClientSetup"></a>
+
+
+<h2>Generate an SSH key pair for your PC</h2>
+
+<p>Generate an ssh key so that remote access to the Raspberry Pi will
+be limited to your PC.  The key is only generated if one does
+not already exist.  For more info, see
+<a href="http://hackerpublicradio.org/eps.php?id=2356">HPR Episode 2356</a>
+.  This command will generate the key:</p>
+
+<pre><code>        $ [ -e ~/.ssh/id_ed25519.pub ] || ssh-keygen -t ed25519 -C "Raspberry Pi key"
+</code></pre>
+
+<hr /><a name="SDHCSetup"></a>
+
+
+<h2>Create a bootable SDHC (or uSDHC) card that will allow remote access</h2>
+
+<p>These steps initialize an SDHC card with the Raspbian OS so that when inserted
+into a Raspberry Pi the Pi will be on a wireless network and remote
+administration is possible.</p>
+
+<ul>
+<li><p>Download a zipped Raspbian Lite image from the Raspberry Pi website
+<a href="https://www.raspberrypi.org/downloads/">Downloads page</a> to your PC.
+In this example the file was called <strong>2017-08-16-raspbian-stretch-lite.zip</strong></p></li>
+<li><p>Also download the <strong>SHA256SUM</strong> file and use it to verify the downloaded zip.
+Here grep is used so only one file is verified although there are multiple files
+listed in the SHA256SUM file:</p>
+
+<pre><code>      $ grep lite SHA256SUM | sha256sum -c -
+      2017-08-16-raspbian-stretch-lite.zip: OK
+</code></pre></li>
+<li><p>Insert a spare SDHC card into your PC.  <strong>Beware, the entire card will
+be overwritten.  Do not use a card containing important data.</strong></p></li>
+<li><p>Use the <strong>lsblk</strong> utility to determine the device name of the SDHC card.  In
+this example the device is <strong>/dev/mmcblk0</strong> and the only partition is
+<strong>/dev/mmcblk0p1</strong>.  (The SDHC card is an <code>mmcblk</code> device because it is inserted
+into an SDHC slot on the PC.  It might also appear as a SCSI disk with a name
+like <code>sdc</code>.)  <strong>Note which device names are being used for the SDHC card on your
+PC; in commands below you need to use the device names for your SDHC card.</strong></p>
+
+<pre><code>      $ lsblk
+      NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+      sda           8:0    0 931.5G  0 disk 
+      +-sda1        8:1    0 931.5G  0 part /Data
+      sdb           8:16   0 111.8G  0 disk 
+      +-sdb1        8:17   0     1M  0 part 
+      +-sdb2        8:18   0    20G  0 part /Alt
+      +-sdb3        8:19   0    20G  0 part /
+      +-sdb4        8:20   0     4G  0 part [SWAP]
+      +-sdb5        8:21   0     5G  0 part /tmp
+      +-sdb6        8:22   0  62.8G  0 part /home
+      mmcblk0     179:0    0  14.5G  0 disk 
+      +-mmcblk0p1 179:1    0  14.5G  0 part /media/rob/8B12-39CA
+</code></pre></li>
+<li><p>If any file systems on the SDHC card are mounted, they must be unmounted.  The
+listing above gives the mountpoint for any mounted file systems on the SDHC
+card.  This command unmounts it.</p>
+
+<pre><code>      $ umount /media/rob/8B12-39CA
+</code></pre></li>
+<li><p>Extract the image and (as the superuser) copy it to the SDHC card.
+The dd command uses the disk device of the SDHC card that was seen above in the
+output from <code>lsblk</code>.</p>
+
+<pre><code>      $ zcat 2017-08-16-raspbian-stretch-lite.zip | sudo dd of=/dev/mmcblk0 bs=1M conv=fsync
+      [sudo] password for rob:
+      0+56591 records in
+      0+56591 records out
+      1854418944 bytes (1.9 GB, 1.7 GiB) copied, 157.615 s, 11.8 MB/s
+</code></pre></li>
+<li><p>Remove the SDHC card from the PC.  Wait a few seconds and re-insert the the SDHC
+card.  Use <code>lsblk</code> to discover if the file systems on the SDHC card were
+automatically mounted.  (Both partitions automatically mounted on my Ubuntu PC.)</p>
+
+<pre><code>      $ lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT | grep mmc
+      mmcblk0             14.5G 
+      +-mmcblk0p1 vfat    41.8M /media/rob/boot
+      +-mmcblk0p2 ext4     1.7G /media/rob/28590797-4810-4851-b4ec-bf9672c2918c
+</code></pre></li>
+<li><p>The larger partition on the SDHC card contains the ext4 root file system.  The
+smaller partition contains the vfat /boot file system with the kernel and
+configuration information.</p>
+
+<p>  In case the ext4 file system was not automatically mounted, then as the
+superuser manually mount it.  A command like this can be used:</p>
+
+<pre><code>      $ sudo mount /dev/mmcblk0p2 /mnt
+</code></pre></li>
+<li><p>Become the superuser and change directory to to where the root file system
+is mounted.</p>
+
+<pre><code>      $ sudo -i
+      # cd /media/rob/28590797-4810-4851-b4ec-bf9672c2918c
+</code></pre></li>
+<li><p>In case the vfat file system is not mounted, use a command like the following
+to mount it.</p>
+
+<pre><code>      # mount /dev/mmcblk0p2 boot
+</code></pre></li>
+<li><p>Enable the ssh server to start when the Raspberry Pi boots by creating a file called <code>ssh</code> in the directory where the /boot file system is mounted.
+<a href="https://www.raspberrypi.org/documentation/remote-access/ssh/README.md">Remote-Access SSH</a>
+has more details.  Then unmount the /boot file system.  These are the commands used
+with the boot filesystem automatically mounted upon SDHC insertion:</p>
+
+<pre><code>      # touch /media/rob/boot/ssh
+      # umount /media/rob/boot
+</code></pre></li>
+<li><p>Configure the ssh server so that access is limited to using key-based
+authentication as explained in
+<a href="https://www.raspberrypi.org/documentation/configuration/security.md">Securing your Raspberry Pi</a>:</p>
+
+<pre><code>      # sed -i etc/ssh/sshd_config \
+      &gt; -e '/^[#[:space:]]*ChallengeResponseAuthentication /s/.*/ChallengeResponseAuthentication no/' \
+      &gt; -e '/^[#[:space:]]*PasswordAuthentication /s/.*/PasswordAuthentication no/' \
+      &gt; -e '/^[#[:space:]]*PermitRootLogin /s/.*/PermitRootLogin no/' \
+      &gt; -e '/^[#[:space:]]*UsePAM /s/.*/UsePAM no/'
+</code></pre></li>
+<li><p>Configure user <code>pi</code> to allow ssh login via your public key from the PC.
+Substitute your username on the PC for <code>rob</code> when executing the second command:</p>
+
+<pre><code>      # mkdir home/pi/.ssh
+      # cat ~rob/.ssh/id_ed25519.pub &gt;&gt; home/pi/.ssh/authorized_keys
+      # chown 1000:1000 home/pi/.ssh home/pi/.ssh/authorized_keys
+      # chmod 700 home/pi/.ssh
+      # chmod 600 home/pi/.ssh/authorized_keys
+</code></pre></li>
+<li><p>Configure the WiFi settings so the Raspberry Pi will automatically connect to
+your network.  Here the country code is set to <strong>US</strong>.  Then a configuration is added for a network with SSID <strong>testing</strong> and password <strong>testingPassword</strong>.
+For more detail, see:
+<a href="https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md">Setting WiFi up via the command line</a></p>
+
+<pre><code>      # pushd etc/wpa_supplicant
+      # sed -e '/^country=/s/=.*/=US/' -i wpa_supplicant.conf
+      # wpa_passphrase "testing" "testingPassword" &gt;&gt; wpa_supplicant.conf
+      # popd
+</code></pre></li>
+<li><p>Optionally, set the hostname used by the Raspberry Pi.  Here it is set to
+<strong>AudioPi</strong> making it easier to find on the network.</p>
+
+<pre><code>      # echo 'AudioPi' &gt; etc/hostname
+</code></pre></li>
+<li><p>Unmount the root file system.  Then give up the superuser privilege.</p>
+
+<pre><code>      # cd
+      # umount /media/rob/28590797-4810-4851-b4ec-bf9672c2918c
+      # exit
+      logout
+      $
+</code></pre></li>
+<li><p>Remove the SDHC card from the PC.</p></li>
+</ul>
+
+
+<hr /><a name="RaspiConfig"></a>
+
+
+<h2>Perform initial Raspbian configuration</h2>
+
+<p>To avoid damage, two guidelines should be followed.</p>
+
+<ol>
+<li><p>Except for USB devices, do not connect or disconnect anything with the
+Raspberry Pi when power is applied.</p></li>
+<li><p>If possible, perform a clean shutdown of Raspbian via a command like
+<code>sudo poweroff</code> before removing power.</p></li>
+</ol>
+
+
+<p>These steps boot the Raspberry Pi from the SDHC card and use remote access
+to perform initial configuration.</p>
+
+<ul>
+<li><p>Insert the SDHC card into the Raspberry Pi.</p></li>
+<li><p>If the Raspberry Pi does not have on-board WiFi, insert a USB WiFi dongle.
+(Or connect the Raspberry Pi to wired a ethernet.)</p></li>
+<li><p>Connect power to the Raspberry Pi.</p></li>
+<li><p>Allow 2 minutes for the Pi to boot and get on the network.  Then verify that it is
+reachable on the network by entering this command from the PC.  If the hostname was
+not changed during the prior steps, it will be <code>raspberrypi</code> instead of <code>audiopi</code>:</p>
+
+<pre><code>      $ ping -c 5 audiopi
+</code></pre>
+
+<p>  If connectivity and remote access is not working, disconnect power, then
+connect a monitor and USB keyboard to the Raspberry Pi; power up and manually
+diagnose.
+Alternately, you can insert the SDHC card into your PC and examine the log
+files in <code>var/log</code> of the root file system.  For example, look in <code>daemon.log</code>
+or <code>syslog</code> to verify that wpa_supplicant could successfully start.</p></li>
+<li><p>Use ssh on the PC to login to the Pi via the network:</p>
+
+<pre><code>      $ ssh pi@audiopi
+      The authenticity of host 'audiopi (192.168.77.123)' can't be established.
+      ECDSA key fingerprint is SHA256:LGg0xwraVMIY3Q2DMAwwRBxhLMvbCbY9Lvr20EWm0bk.
+      Are you sure you want to continue connecting (yes/no)? yes
+      Warning: Permanently added 'audiopi' (ECDSA) to the list of known hosts.
+      /usr/bin/xauth:  file /home/pi/.Xauthority does not exist
+</code></pre></li>
+<li><p>Become the superuser on the Pi.  Then delete the file that allows this
+without requiring a password to be entered:</p>
+
+<pre><code>      pi@AudioPi:~ $ sudo -i
+      root@AudioPi:~# rm /etc/sudoers.d/010_pi-nopasswd
+</code></pre></li>
+<li><p>Update all software and install ssh related packages.  This step requires
+a working Internet connection:</p>
+
+<pre><code>      root@AudioPi:~# apt update &amp;&amp; apt upgrade -y
+      ...
+      root@AudioPi:~# apt install -y molly-guard openssh-blacklist-extra
+      ...
+</code></pre></li>
+<li><p>Use the <code>raspi-config</code> command to change these settings.  These
+settings apply to my use case.  In particular, the Interfacing Options
+will depend upon your intended use of the Pi:</p>
+
+<pre><code>      - 1: Change User Password
+      - 3: Boot Options
+           - B1: Text console, requiring user to login
+           - B2: No wait during boot until a network connection is established.
+      - 4: Localisation Options (Use what applies to your location...)
+           - I1: Locale - disable: en_GB.UTF-8
+                        - enable:  en_US.UTF-8
+                        - system default: C.UTF-8
+           - I2: Timezone = US Eastern
+      - 5 Interfacing Options
+           - P5 I2C Interface:      enabled
+           - P6 Serial Port Login:  enabled
+      - 7 Advanced Options:
+           - A3 Memory Split:       8 MB for the GPU
+           - A1 Expand Filesystem:  selected
+</code></pre>
+
+<p>  The last step in <code>raspi-config</code> is to choose <strong><code>&lt;Finish&gt;</code></strong>.  At this point,
+do not allow raspi-config to reboot the Raspberry Pi.  Instead power-off the Pi
+so the hardware can be reconfigured if that is required.  Molly-guard requires
+verification of which machine to reboot.  (The correct case must be used for the
+hostname.)  It may take a very long time before the PC discovers the broken
+connection thus a long delay before the <code>Broken pipe</code> message.</p>
+
+<pre><code>      root@AudioPi:~# raspi-config
+      ...
+      root@AudioPi:~# poweroff
+      W: molly-guard: SSH session detected!
+      Please type in hostname of the machine to reboot: AudioPi
+      packet_write_wait: Connection to 192.168.77.123 port 22: Broken pipe
+</code></pre></li>
+</ul>
+
+
+<p>This completes the initial setup.</p>
+
+<hr />
+
+<hr />
+
+
+
