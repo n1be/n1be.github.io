@@ -1,4 +1,10 @@
+# Copyright (C) 2019 Robert N. Evans
+
+# Python bytecode
 *.pyc
 *.pyo
+
+# Editor backup and temporary files
 *.swp
 *~
+
