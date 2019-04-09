@@ -1,0 +1,759 @@
+
+
+  RSX-11M V3.2 BL26   1920K  MAPPED
+>RED DB:=SY:
+>RED DB:=LB:
+>MOU DB:SYSGENBL26
+>@DB:[1,2]STARTUP
+>* PLEASE ENTER TIME AND DATE (HR:MN DD-MMM-YY) [S]: 
+
+Connected to the PDP-11 simulator CON-TELNET device
+
+31-mar-19 14:45
+>TIM 31-mar-19 14:45
+>* ENTER LINE WIDTH OF THIS TERMINAL [D D:132.]: 
+>SET /BUF=TI:132.
+>set /pub=db1:
+>mou db1:USERDIRS
+>ACS SY:/BLKS=512.
+>;
+>; NOTE - The Baseline INDirect must be replaced by BIGIND with 
+>;      a priority of 10. for SYSGEN.
+>;
+>;  ie  >REM ...AT.
+>;      >INS $BIGIND/PRI=10.
+>;
+>@ <EOF>
+>m\m\asn\nsa\
+>set /crt=ti:
+>all db2:
+>mou db2:/ovr
+>all dl1:
+>mou dl1:rsxm26
+>edi db2:[200,200]syssaved.cmd
+[00036 LINES READ IN]
+[PAGE    0]
+*pl $DZ0
+[00036 LINES READ IN]
+[00036 LINES READ IN]
+[00028 LINES READ IN]
+.SETS $$DZ0 "300,160100,7"
+*ch /300/310
+.SETS $$DZ0 "310,160100,7"
+*
+.SETS $$DZ1 "310,160110,7"
+*ch /310/320
+.SETS $$DZ1 "320,160110,7"
+*ex
+[EXIT]
+
+>pip dl1:[200,200]/nv/fo/ =db2:    db2:[200,200]syssaved.cmd
+>rem ...at.
+>ins $bigind/pri=10.
+INS -- WARNING - PRIVILEGED TASK OVERMAPS I/O PAGE
+>asn dl1:=sy:
+>set /uic=[200,200]
+>@sysgen
+>;
+>; RSX-11M Ver. 3.2 BL26 System Generation 3.2.3a done on 31-MAR-19 at 14:55:34
+>;
+>; Copyright (C) 1979 Digital Equipment Corporation, Maynard Mass.
+>;
+>; RL01 distribution kit
+>;
+>*  1. Inhibit MCR command lines (Type <ESC> for explanation)? [Y/N]:
+>*  2. Have you made a copy of the distribution kit? [Y/N]:y
+>*  3. Use saved or canned answer file for input responses? [Y/N]:y
+>*  4. Undefined answer wakeup? [Y/N]:y
+>*  5. Use saved host configuration? [Y/N]:y
+>*  6. Use saved peripheral configuration? [Y/N]:y
+>*  7. Skip end of section (EOS) breakpoints? [Y/N]:y
+>*  8. Skip end of execution (EOX) breakpoints? [Y/N]:y
+>* 10. Save responses (i.e.: create SYSSAVED.DAT)? [Y/N]:
+>* 11. UIC for SYSSAVED files if not [200,200]  [S]: 
+>* 12. UIC for SYSGEN command files if not [200,200] [S]: 
+>* 13. Clean up files from previous GENs? [Y/N]:y
+>;
+>; Saved-answer file created 28-MAR-19 AT 16:11:29 by SYSGEN version 3.2.3a 
+>;
+>* 14. Device, when ready, for Executive sources (ddu:)  [S]: dl2:
+>;
+>MOU DL2:MAPSRC
+>ASN DL2:=LB:
+>;
+>SET /UIC=[1,1]
+>PIP [1,20]RSXBLD.CMD;*/DE/NM,SYSPAR;*
+>PIP [1,24]RSXBLD.CMD;*/DE/NM,TTDRVBLD;*,SYSPAR;*
+>PIP [1,50]SYSVMR.CMD;*/DE/NM,[1,54]SYSVMR;*
+>PIP [11,20]*.OBJ;*/DE/NM,*.UDC;*,*.ICR;*,*.IDS;*,*.PCS;*
+>PIP [11,20]RSXASM.CMD;*/DE/NM,RSXDRVASM;*,RSXBLD;*
+>PIP [11,24]*.OBJ;*/DE/NM,*.UDC;*,*.ICR;*,*.IDS;*,*.TTY;*,*.PCS;*
+>PIP [11,24]RSXASM.CMD;*/DE/NM,RSXDRVASM;*,RSXBLD;*
+>PIP [11,10]SYSTB.MAC;*/DE/NM,ICTAB;*,RSXMC;*,[200,200]SGNPARM.CMD;*
+>PIP [11,10]RSXASM.CMD;*/DE/NM,RSXDRVASM;*,RSXBLD;*
+>PIP /FR
+
+DL1: HAS 5706. BLOCKS FREE, 4534. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 3493. BLOCKS
+
+>SET /UIC=[11,10]
+>;
+>; Target configuration
+>;
+>; Processor:11/70   Memory Size:128K,Mapped   System:RSX-11M
+>;
+>; Host configuration
+>;
+>; Executive Options
+>;
+>; Terminal driver options
+>;
+>;     Thinking ...
+>;
+>; End of Executive option generation at 14:56:17 on 31-MAR-19
+>;
+>; Peripheral configuration
+>;
+>;     Parameters  appearing  in  square  brackets  "[...]"  can  only be
+>;     specified  for  the  first  controller  of  a  particular  device.
+>;     Parameters appearing in parentheses "(...)" only need be specified
+>;     if   the  indicated  option  is  present  on  the  target  system.
+>;    
+>;     The   default  for  loadable  drivers  has  been  set  to  *TRUE*.
+>;     To override this setting enter R (resident) as the first parameter
+>;     for    the    first    controller   of   the   specified   device.
+>;    
+>; A/D and Laboratory devices: None specified
+>;
+>; Interprocessor communication devices: None specified
+>;
+>; Unit record devices: CR, LP, PR, PP
+>;
+>; Disks: DB, DD, DK, DL, DM, DT, DY
+>;
+>; Tapes: CT, MM
+>;
+>; Non-physical (pseudo) devices: CO, TT, NL, TI, CL, LB, SY
+>;
+>SET /UIC=[1,24] ! Creating TTDRVBLD.CMD
+>SET /UIC=[11,10]
+>; End of interrupt vector area has been set to 400
+>;
+>;
+>; Create Executive build files
+>;
+>PIP RSXMC.MAC=LB:RSXMC0.MAC/AP
+>;
+>; Assemble the Executive
+>;
+>PIP [11,24]/NV=RSXASM.CMD,RSXDRVASM.CMD
+>PIP RSXASM.CMD;0/DE,RSXDRVASM;0
+>INS SY:$BIGMAC
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>;SET /COFFEEBREAK=TI: Start of Executive assembly at 14:56:39 on 31-MAR-19
+>SET /UIC=[11,24]
+>MAC @RSXASM
+>;SET /NOCOFFEEBREAK=TI: Executive assembly ended at 14:58:22 on 31-MAR-19
+>;SET /COFFEEBREAK=TI: Start of device drivers assembly at 14:58:22 on 31-MAR-19
+>SET /UIC=[11,24]
+>MAC @RSXDRVASM
+>;SET /NOCOFFEEBREAK=TI: Device drivers assembly ended at 14:59:53 on 31-MAR-19
+>REM MAC
+>;
+>; Prepare for task building
+>;
+>PIP RSX.OBS=*.OBJ
+>PIP *.OBJ;*/DE/NM
+>PIP RSX11M.OBJ/RE=RSX.OBS
+>PIP TTDRV.OBJ=*.TTY
+>PIP *.TTY;*/DE/NM
+>SET /UIC=[1,24]
+>PIP /NV=[11,10]RSXBLD.CMD
+>;
+>;
+>; End of SYSGEN phase I at 14:59:57 on 31-MAR-19
+>;     -- To continue type: @[200,200]SYSGEN2
+>;
+>SET /UIC=[200,200]
+>@ <EOF>
+>
+>
+>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+>Prepare for Sysgem n phase II
+MCR -- TASK NOT IN SYSTEM
+>
+>pip
+PIP>db:[1,34]*.*;*/de,db:[11,10]*.*;*
+PIP -- DIRECTORY WRITE PROTECTED
+DB:[1,34]*.*;* -- PRIVILEGE VIOLATION
+PIP -- DIRECTORY WRITE PROTECTED
+DB:[11,10]*.*;* -- PRIVILEGE VIOLATION
+PIP>set /ui       ^Z
+>set /uic=[1,1]
+>pip
+PIP>db:[1,34]*.*;*/de,db:[11,10]*.*;*
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]ADDRV.MAC;,AFDRV.MAC;,ARDRV.MAC;
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]ICDRV.MAC;,IPDRV.MAC;,ISDRV.MAC;
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]LADRV.MAC;,LSDRV.MAC;,UDDRV.MAC;
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]XBDRV.MAC;,XLDRV.MAC;,XMDRV.MAC;
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]XPDRV.MAC;,XQDRV.MAC;,XUDRV.MAC;
+PIP>db:[11,10]/nv/fo/cd=dl2:[11,10]XWDRV.MAC;
+PIP>dl2:[11,10]ADDRV.MAC;*/de,AFDRV.MAC;*,ARDRV.MAC;*
+PIP>dl2:[11,10]ICDRV.MAC;*/de,IPDRV.MAC;*,ISDRV.MAC;*
+PIP>dl2:[11,10]LADRV.MAC;*/de,LSDRV.MAC;*,UDDRV.MAC;*
+PIP>dl2:[11,10]XBDRV.MAC;*/de,XLDRV.MAC;*,XMDRV.MAC;*
+PIP>dl2:[11,10]XPDRV.MAC;*/de,XQDRV.MAC;*,XUDRV.MAC;*,XWDRV.MAC;*
+PIP>^Z
+>
+>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+>;;; OK now run Sysgen phase II
+>
+>set /uic=[200,200]
+>@sysgen2
+>;
+>; RSX-11M Version  3.2 System Generation Phase II started 31-MAR-19 at 15:07:22
+>;
+>; Copyright (C) 1979 Digital Equipment Corporation, Maynard Mass.
+>;
+>*  1. In what UIC is SGNPARM.CMD if not [200,200] [S]: 
+>;
+>; RL01 distribution kit SYSGEN versions 3.2.3a / 2:3.2.2d  for RSX11M BL26
+>;
+>; Continuation from SYSGEN phase I done on 31-MAR-19 at 14:59:57
+>;
+>;     The map device ( DB: ) must already be mounted with UIC [1,34].
+>;     If  it  is  not,  ^Z  SYSGEN2  at  the  next  question and do so.
+>;
+>*  2. Expanded comments desired for SYSGEN phase II? [Y/N]:
+>*  3. Is SYSGEN still running on-line? [Y/N]:y
+>*  5. If not in DL2: enter object files device when ready (ddu:) [S]: 
+>;
+>MOU DL2:MAPSRC
+>ASN DL2:=LB:
+>ASN SY:=TK:
+>PIP /FR
+
+DL1: HAS 5336. BLOCKS FREE, 4904. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 3493. BLOCKS
+
+>*  6. Have you already built the libraries, the Exec, and the loadable drivers? [Y/N]:
+>;
+>; Start of Executive and driver build phase at 15:08:02 on 31-MAR-19
+>;
+>;
+>; Create system libraries at 15:08:02 on 31-MAR-19
+>;
+>INS $LBR
+>SET /UIC=[1,1]
+>PIP ANSLIB.OLB/NV=SYSLIB.OLB
+>LBR ANSLIB/RP=LB:FCSMTA
+MODULE "ANSPAD" REPLACED
+
+MODULE "ASSLUN" REPLACED
+
+MODULE "BIGBUF" REPLACED
+
+MODULE "CLOSE " REPLACED
+
+MODULE "CREATE" REPLACED
+
+MODULE "DIRECT" REPLACED
+
+MODULE "GET   " REPLACED
+
+MODULE "GETSQ " REPLACED
+
+MODULE "OPEN  " REPLACED
+
+MODULE "OPFID " REPLACED
+
+MODULE "OPFNB " REPLACED
+
+MODULE "POINT " REPLACED
+
+MODULE "PUT   " REPLACED
+
+MODULE "PUTSQ " REPLACED
+
+MODULE "RDWAIT" REPLACED
+
+MODULE "RETADR" REPLACED
+
+MODULE "RWBLK " REPLACED
+
+MODULE "WATSET" REPLACED
+
+MODULE "WTWAIT" REPLACED
+
+>SET /UIC=[1,24]
+>PIP RSX11M.OLB;*/DE/NM,TTDRV;*
+>LBR RSX11M/CR:80.:640.:256.=[11,24]RSX11M.OBJ
+LBR -- *FATAL*-EPT OR MNT EXCEEDED IN RSX11M.OBJ;1
+
+>LBR TTDRV/CR:52.:256.:64.=[11,24]TTDRV.OBJ
+>PIP LB:/NV=LB:MCR.OLB
+>LBR LB:MCR/RP=LB:MCRTTFD
+MODULE "SETOV " REPLACED
+
+MODULE "SPROV " REPLACED
+
+MODULE "SDSOV " REPLACED
+
+>INS SY:$BIGTKB
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>;
+>; Taskbuild the Executive and the terminal driver at 15:08:13 on 31-MAR-19
+>;
+>PIP [1,34]*.*;*/DE/NM
+>TKB @RSXBLD
+TKB -- *FATAL*-LIBRARY FILE RSX11M.OLB;1 HAS INCORRECT FORMAT
+
+
+>;
+>* EOX * Did the Executive build successfully? [Y/N]:
+>;
+>;     We will pause now so that you can correct the problem.  After
+>;     resuming, we will build the Executive again.
+
+AT. -- PAUSING. TO CONTINUE TYPE "RES ...AT."
+
+>pip rsx11m.olb;*/de
+>lbr rsx11m/cr:83.:660.:265.=[11,24]rsx11m.obj
+>res ...at.
+
+AT. -- CONTINUING
+>
+>PIP [1,34]*.*;*/DE/NM
+>TKB @RSXBLD
+>;
+>* EOX * Did the Executive build successfully? [Y/N]:y
+>;
+>SET /UIC=[1,54]
+>PIP LB:/NV=RSX11M.STB
+>SET /UIC=[1,24]
+>TKB @TTDRVBLD
+>;
+>* EOX * Did the terminal driver build successfully? [Y/N]:y
+>;
+>* 10. List Executive map? [Y/N]:
+>;
+>; Build Loadable drivers
+>;
+>*  6. Device for driver's maps [D: NL:] [S]: db:
+>*  9. Build all selected loadable drivers into DRVPAR? [Y/N]:y
+>;
+>TKB @[200,200]CODRVBLD
+>PIP [200,200]CODRVBLD.CMD;*/DE
+>PIP [1,54]CODRV.STB/TR
+>TKB @[200,200]CRDRVBLD
+>PIP [200,200]CRDRVBLD.CMD;*/DE
+>PIP [1,54]CRDRV.STB/TR
+>TKB @[200,200]CTDRVBLD
+>PIP [200,200]CTDRVBLD.CMD;*/DE
+>PIP [1,54]CTDRV.STB/TR
+>TKB @[200,200]DBDRVBLD
+>PIP [200,200]DBDRVBLD.CMD;*/DE
+>PIP [1,54]DBDRV.STB/TR
+>TKB @[200,200]DDDRVBLD
+>PIP [200,200]DDDRVBLD.CMD;*/DE
+>PIP [1,54]DDDRV.STB/TR
+>TKB @[200,200]DKDRVBLD
+>PIP [200,200]DKDRVBLD.CMD;*/DE
+>PIP [1,54]DKDRV.STB/TR
+>TKB @[200,200]DLDRVBLD
+>PIP [200,200]DLDRVBLD.CMD;*/DE
+>PIP [1,54]DLDRV.STB/TR
+>TKB @[200,200]DMDRVBLD
+>PIP [200,200]DMDRVBLD.CMD;*/DE
+>PIP [1,54]DMDRV.STB/TR
+>TKB @[200,200]DTDRVBLD
+>PIP [200,200]DTDRVBLD.CMD;*/DE
+>PIP [1,54]DTDRV.STB/TR
+>TKB @[200,200]DYDRVBLD
+>PIP [200,200]DYDRVBLD.CMD;*/DE
+>PIP [1,54]DYDRV.STB/TR
+>TKB @[200,200]LPDRVBLD
+>PIP [200,200]LPDRVBLD.CMD;*/DE
+>PIP [1,54]LPDRV.STB/TR
+>TKB @[200,200]MMDRVBLD
+>PIP [200,200]MMDRVBLD.CMD;*/DE
+>PIP [1,54]MMDRV.STB/TR
+>TKB @[200,200]PPDRVBLD
+>PIP [200,200]PPDRVBLD.CMD;*/DE
+>PIP [1,54]PPDRV.STB/TR
+>TKB @[200,200]PRDRVBLD
+>PIP [200,200]PRDRVBLD.CMD;*/DE
+>PIP [1,54]PRDRV.STB/TR
+>;
+>; End of library, Executive and driver build phase at 15:13:50 on 31-MAR-19
+>;
+>; Start task building privileged tasks at 15:13:50 on 31-MAR-19
+>;
+>* 11. FCP desired  (Type <ESC> for explanation)  [D: MIDDLE] [S]: PLAS
+>* 13. Build the unprivileged queue manager utilities? [Y/N]:y
+>* 14. Build the task PMD? [Y/N]:y
+>* 15. Build RMDEMO? [Y/N]:y
+>;
+>;     Note that the following task-builds will be executed for your system:
+>;
+>;       BOOBLD    DMOBLD    COTBLD    FCPRO2BLD INDBLD    INIBLD    INSBLD    
+>;       MCRMUBLD  MOUBLD    QMGBLD    QMGCLIBLD QMGPRTBLD LPPBLD    F11MSGBLD 
+>;       MTABLD    SAVBLD    TKNBLD    UFDBLD    LOABLD    UNLBLD    PMDBLD    
+>;       RMDBLD    SHFBLD    ACNTBLD   BYEBLD    HELBLD    BROBLD    SHUTUPBLD 
+>;       ACSBLD    ERFBLD    ERLBLD    
+>;
+>* 17. Edit any privileged task build files? [Y/N]:
+>* 18. Map device for privileged tasks (ddu:) [D: NL:] [S]: db:
+>;
+>ASN DB:=MP:
+>* 18. Is DB: mounted as a Files-11 volume with UFD [1,34]? [Y/N]:y
+>ASN LB:=SY:
+>ASN =LB:
+>ASN =SY:
+>ASN DL2:=SY:
+>ASN DL1:=LB:
+>TKB @BOOBLD
+>TKB @DMOBLD
+>TKB @COTBLD
+>TKB @FCPRO2BLD
+>TKB @INDBLD    ! GENERATING SMALL INDIRECT
+>TKB @INIBLD
+>TKB @INSBLD
+>TKB @MCRMUBLD
+>TKB @MOUBLD
+>TKB @QMGBLD
+>TKB @QMGCLIBLD
+>TKB @QMGPRTBLD
+>TKB @LPPBLD
+>TKB @F11MSGBLD
+>TKB @MTABLD
+>TKB @SAVBLD
+>TKB @TKNBLD
+>TKB @UFDBLD
+>TKB @LOABLD
+>TKB @UNLBLD
+>TKB @PMDBLD
+>TKB @RMDBLD
+>TKB @SHFBLD
+>TKB @ACNTBLD
+>TKB @BYEBLD
+>TKB @HELBLD
+>TKB @BROBLD
+>TKB @SHUTUPBLD
+>TKB @ACSBLD
+>TKB @ERFBLD
+>TKB @ERLBLD
+>;
+>* EOX * Did the privileged tasks build successfully? [Y/N]:y
+>;
+>; End of privileged task builds at 15:19:34 on 31-MAR-19
+>;
+>REM TKB
+>ASN LB:=SY:
+>ASN =LB:
+>ASN =SY:
+>ASN DL1:=SY:
+>ASN DL2:=LB:
+>SET /UIC=[1,54]
+>PIP /FR
+
+DL1: HAS 3517. BLOCKS FREE, 6723. BLOCKS USED OUT OF 10240.
+LARGEST CONTIGUOUS SPACE = 3463. BLOCKS
+
+>;
+>;     SGN -- SYSGEN will now pause to allow you to create your
+>;            RSX11M.SYS file using the following example.  Ideally
+>;            your system it should occupy the same number of blocks
+>;            as indicated in the example.
+>;
+>;            PIP RSX11M.SYS/NV/CO/BL:498.=RSX11M.TSK
+
+AT. -- PAUSING. TO CONTINUE TYPE "RES ...AT."
+
+>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+>;;; Set up the target disk.  will b pu          , pu                          Create target disk to receive generated system.
+>
+>;;; Initialize and mount the target disk
+>set /uic=[1,1]
+>all db2:
+ALL -- DEVICE MOUNTED 
+>
+>> asn db2:=sy:
+>ini sy:rsxm26patchE/lru=7/mxf=25000
+INI -- VOLUME MOUNTED FILES-11 
+>dmo db2:/dev
+DMO -- TT0:   DISMOUNTED FROM DB2:    *** FINAL DISMOUNT *** 
+  *** DB2:  -- DISMOUNT COMPLETE 
+
+>ini sy:rsxm26patchE/lru=7/mxf=25000
+>mou sy:rsxm26patchE
+>
+>;;; Copy files for sysgen phase III
+>all dl3:
+>mou dl3:rlutil
+>pip sy:[*,*]/uf/fo/cd/nv=dl3:[*,*]*.*
+>
+>;;; Copy mapped source files
+>pip sy:[*,*]/uf/fo/cd/nv=db0:[11,10]*.*,dl2:[*,*]*.*
+>pip sy:[*,*]*.*/pu
+>
+>;;; Copy baseline files
+>pip sy:[*,*]/uf/fo/cd/nv=dl1:[*,*]*.*
+>pip sy:[*,*]*.*/pu
+>
+>;;; Copy listings, maps, customized startup file
+>pip sy:[*,*]/uf/fo/cd/nv=db0:[11,34]*.*,[1,34]*.*,[1,2]startup.cmd
+>
+>;;; Copy the system accounts file
+>pip sy:[0,0]/fo/cd=db0:[0,0]rsx11.sys
+>pip sy:[*,*]*.*/pu
+>
+>;;;Create bootable system image file
+>set /uic=[1,54]
+>pip rsx11m.sys;*/de
+>pip rsx11m.sys/co/bl:498.=rsx11m.tsk
+>
+>res ...at.
+
+AT. -- CONTINUING
+>
+>;
+>* 19. Edit SYSVMR.CMD? [Y/N]:y
+>;
+>EDI SYSVMR.CMD
+[00036 LINES READ IN]
+[PAGE    0]
+*pf LOA
+LOA TT:
+*
+SET /MAIN=DRVPAR:*:*:SYS
+*
+LOA DB:
+*kill
+EDI>^Z
+[EXIT]
+
+>ASN SY:=LB:
+>;
+>; You will have to run VMR after the command file exits
+>; since we dont know what is the real system volume.
+>; 
+>;     When the indirect file exits, boot in your target system,
+>;     set the date and time, and save the system with a bootstrap.
+>;     When your system reboots itself, purge the old task files.
+>; 
+>;
+>;     An alternate version of SYSLIB called ANSLIB has been created
+>;     on the RSXM26 disk to take into account ANSI support and Big-buffering.
+>;
+>;     Since you have selected ANSI magtape support you may want to
+>;     rebuild PIP and other utilities in SYSGEN phase III to take
+>;     advantage of ANSI support.  Note this will cause an increase 
+>;     in the size of the utility compared with the non-ANSI version.
+>;
+>;     Don't forget to create accounts after saving your system
+>REM LBR
+>ASN =LB:
+>;
+>; End of SYSGEN phase II at 15:30:08 on 31-MAR-19
+>;
+>@ <EOF>
+>
+>asb n db2:=lb:
+>asn db2:=sy:
+>ins db:vmr
+>vmr @sysvmr
+VMR -- INSTALLED TASKS MAY NO LONGER FIT IN PARTITION
+SET /TOP=DRVPAR:-*
+POOL=1200:5818.:05818.
+LDRPAR 117734 00120000 00002400 MAIN TASK
+TTPAR  117420 00122400 00040000 MAIN TASK
+DRVPAR 117074 00162400 00031300 MAIN SYS 
+       117030 00162400 00002000 SUB  DRIVER - DB:
+       116730 00164400 00002600 SUB  DRIVER - DD:
+       116630 00167200 00001100 SUB  DRIVER - DK:
+       116530 00170300 00002000 SUB  DRIVER - DL:
+       116430 00172300 00002300 SUB  DRIVER - DM:
+       116330 00174600 00001100 SUB  DRIVER - DT:
+       116230 00175700 00002400 SUB  DRIVER - DY:
+       116130 00200300 00001300 SUB  DRIVER - CR:
+       116030 00201600 00000600 SUB  DRIVER - CT:
+       115730 00202400 00001100 SUB  DRIVER - LP:
+       115630 00203500 00004200 SUB  DRIVER - MM:
+       115530 00207700 00000500 SUB  DRIVER - PP:
+       115430 00210400 00000300 SUB  DRIVER - PR:
+       115330 00210700 00003000 SUB  DRIVER - CO:
+SYSPAR 115264 00213700 00010000 MAIN TASK
+FCPPAR 115220 00223700 00050000 MAIN SYS 
+GEN    115154 00273700 00504100 MAIN SYS 
+...LDR 11D    117634 LDRPAR 248. 00002400 LB0:-00052707 FIXED
+TKTN   03.95  111554 SYSPAR 248. 00010000 LB0:-00047057
+...RMD V01    114154 GEN    225. 00040000 LB0:-00053744
+F11MSG V0010A 113354 GEN    200. 00040000 LB0:-00053553
+MTAACP 0010   113254 GEN    200. 00013500 LB0:-00053565
+...DMO 23.00  113654 GEN    160. 00040000 LB0:-00046134
+MCR... 02.01  112454 SYSPAR 160. 00010000 LB0:-00053145
+...MOU 22.15  112154 GEN    160. 00040000 LB0:-00046716
+...MCR 01     111654 GEN    160. 00020000 LB0:-00053171
+F11ACP M0320  115054 FCPPAR 149. 00047500 LB0:-00053062
+COT... 00.01  114754 GEN    145. 00040000 LB0:-00052762
+PMD... 05     112654 GEN    140. 00020000 LB0:-00053674
+SHF... 04     111754 SYSPAR 105. 00010000 LB0:-00054045
+...INS 04     112754 GEN    100. 00040000 LB0:-00046471
+...SAV 04.22  112054 GEN    100. 00040000 LB0:-00047006
+...UFD V0410  111454 GEN    100. 00040000 LB0:-00047067
+QMG... 01.04  114654 GEN     75. 00040000 LB0:-00053307
+PRT... 01.01  114354 GEN     70. 00040000 LB0:-00053462
+LPP0   1.06A  114254 GEN     70. 00040000 LB0:-00053466
+...AT. 04.25  113154 GEN     65. 00040000 LB0:-00046323
+...ERF 02     113554 GEN     61. 00040000 LB0:-00054254
+...INI 20.01  113054 GEN     60. 00040000 LB0:-00046427
+...QUE 1.0    114554 GEN     50. 00040000 LB0:-00053363
+...PRI 1.0    114454 GEN     50. 00040000 LB0:-00053363
+...ACS 01     114054 GEN     50. 00040000 LB0:-00047125
+...BOO 03.4   113754 GEN     50. 00040000 LB0:-00046106
+ERRLOG 02     113454 GEN     50. 00040000 LB0:-00054260
+...LOA 03.3   112554 GEN     50. 00040000 LB0:-00046524
+...HEL 02     112354 GEN     50. 00040000 LB0:-00054150
+...BYE 02.5   112254 GEN     50. 00004000 LB0:-00054142
+...UNL 02.8   111354 GEN     50. 00040000 LB0:-00047076
+CR0:    LOADED
+LP0:    LOADED
+PP0:    LOADED
+PR0:    LOADED
+DB0:    LOADED
+DB1:    LOADED
+DB2:    LOADED
+DB3:    LOADED
+DB4:    LOADED
+DB5:    LOADED
+DB6:    LOADED
+DB7:    LOADED
+DD0:    LOADED
+DD1:    LOADED
+DK0:    LOADED
+DK1:    LOADED
+DK2:    LOADED
+DK3:    LOADED
+DK4:    LOADED
+DK5:    LOADED
+DK6:    LOADED
+DK7:    LOADED
+DL0:    LOADED
+DL1:    LOADED
+DL2:    LOADED
+DL3:    LOADED
+DM0:    LOADED
+DM1:    LOADED
+DM2:    LOADED
+DM3:    LOADED
+DM4:    LOADED
+DM5:    LOADED
+DM6:    LOADED
+DM7:    LOADED
+DT0:    LOADED
+DT1:    LOADED
+DT2:    LOADED
+DT3:    LOADED
+DT4:    LOADED
+DT5:    LOADED
+DT6:    LOADED
+DT7:    LOADED
+DY0:    LOADED
+DY1:    LOADED
+CT0:    LOADED
+CT1:    LOADED
+MM0:    LOADED
+MM1:    LOADED
+MM2:    LOADED
+MM3:    LOADED
+CO0:  TT0:
+TT0:    LOADED
+TT1:    LOADED
+TT2:    LOADED
+TT3:    LOADED
+TT4:    LOADED
+TT5:    LOADED
+TT6:    LOADED
+TT7:    LOADED
+TT10:    LOADED
+TT11:    LOADED
+TT12:    LOADED
+TT13:    LOADED
+TT14:    LOADED
+TT15:    LOADED
+TT16:    LOADED
+TT17:    LOADED
+TT20:    LOADED
+NL0:  
+TI0:  
+CL0:  TT0:
+LB0:  DB0:
+SY0:  DB0:
+>tim 31-mar-19 15:35
+>set /lower=tt0:
+>set /nologon
+>
+>boo rsx11m     
+XDT: 26     
+     
+XDT>;g
+RSX11M V3.2 BL26  
+
+
+>
+TIM 31-MAR-19 15:38
+>SET /LOWER=TT0:
+>set /nologon
+>sav/wb
+
+  RSX-11M V3.2 BL26   1920K  MAPPED
+>RED DB2:=SY:
+>RED DB2:=LB:
+>MOU DB2:RSXM26PATCHE
+>@DB2:[1,2]STARTUP
+>* Enter date and time ( dd-mmm-yy hh:mm ) [S]: 15:39
+>TIM 15:39
+>@ <EOF>
+>tim
+15:39:04 31-MAR-19
+>run $shurup
+INS -- FILE NOT FOUND
+>run $shutup
+
+RSX11M SHUT DOWN PROGRAM
+
+ENTER MINUTES TO WAIT BEFORE SHUTDOWN: 0
+OK TO SHUTDOWN? [Y/N]: n
+>
+>asn lb:=tk:
+>asn lb:=mp:
+>set /uic=[1,24]
+>run $bigtkb
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+TKB>@bigindbld
+TKB>^Z
+>asn =tk:
+>asn =mp:
+>
+>run $shutup
+
+RSX11M SHUT DOWN PROGRAM
+
+ENTER MINUTES TO WAIT BEFORE SHUTDOWN: 0
+OK TO SHUTDOWN? [Y/N]: y
+ALL FURTHER LOGINS ARE DISABLED
+
+31-MAR-19 21:51 PLEASE FINISH UP, 0   MINUTES BEFORE SHUTDOWNALL FURTHER LOGINS ARE DISABLED
+@LB:[1,2]SHUTUP
+
+AT. -- FILE NOT FOUND
+@LB:[1,2]SHUTUP
+>
+DMO DB2:/DEV
+DMO -- SYSTEM  DISMOUNTED FROM DB2:    *** FINAL DISMOUNT *** 
+ 21:51:35  *** DB2:  -- DISMOUNT COMPLETE 
+
+>
+Disconnected from the PDP-11 simulator
+

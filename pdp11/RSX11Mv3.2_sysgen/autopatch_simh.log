@@ -1,0 +1,51 @@
+Logging to file "simh.log"
+Logging to file "simh.log" at Thu Mar 28 10:19:14 2019
+======================================================================
+***               SIMH Startup  2019-03-28 10:19:14                ***
+----------------------------------------------------------------------
+pdp_hw_config.ini-33> SET CONSOLE TELNET=10000
+Listening on port 10000
+pdp_hw_config.ini-40> ATTACH DZ  10001
+Listening on port 10001
+pdp_hw_config.ini-50> ATTACH LPT ./lp11.out
+LPT: creating new file
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+RP0: 'Sysgen_BL26.rp06' Contains an ODS1 File system
+RP0: Volume Name:   SYSGENBL26 Format: DECFILE11A   Sectors In Volume: 340670
+RP1: 'ods1_userdirs01.rp06' Contains an ODS1 File system
+RP1: Volume Name:     USERDIRS Format: DECFILE11A   Sectors In Volume: 171798
+RK0	1247KW, attached to rsx11m-v32-autopatch-1-2.rk05, write locked
+RK1	1247KW, attached to rsx11m-v32-autopatch-2-2.rk05, write locked
+boot_for_autopatch.ini-38> attach rl0 scratch.rl02
+RL0: creating new file
+RL1: 'RSX-11M_V3.2_RSX11MBL26_3.2.rl01' Contains an ODS1 File system
+RL1: Volume Name:       RSXM26 Format: DECFILE11A   Sectors In Volume: 10240
+RL2: 'RSX-11M_V3.2_RLUTIL.rl01' Contains an ODS1 File system
+RL2: Volume Name:       RLUTIL Format: DECFILE11A   Sectors In Volume: 10240
+---------------------------------------------------------------------
+*** Use TELNET to interact with the simulated PDP CONSOLE terminal:
+Listening on port 10000
+ not connected
+  output buffer size = 131072
++-------------------------------------------------------------------+
+|   NOTE: Ctrl-E at this terminal interrupts the simulator          |
++-------------------------------------------------------------------+
+Running with Buffered Console
+
+Simulation stopped, PC: 004044 (CLRB (R1)+)
+sim> att rl2 RSX-11M_V3.2_UNMSRC.rl01
+RL2: 'RSX-11M_V3.2_UNMSRC.rl01' Contains an ODS1 File system
+RL2: Volume Name:       UNMSRC Format: DECFILE11A   Sectors In Volume: 10240
+sim> c
+
+Simulation stopped, PC: 004044 (CLRB (R1)+)
+sim> attach rl2 RSX-11M_V3.2_MAPSRC.rl01
+RL2: 'RSX-11M_V3.2_MAPSRC.rl01' Contains an ODS1 File system
+RL2: Volume Name:       MAPSRC Format: DECFILE11A   Sectors In Volume: 10240
+sim> c
+
+HALT instruction, PC: 123620 (CLRB @#177776)
+sim> q
+Goodbye
+Log file closed

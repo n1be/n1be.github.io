@@ -1,0 +1,292 @@
+>;;; Sysgen  Phase 1 (Prepgen - Create saved answer file do not assemble exec.)
+>
+>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+>
+>all dl1:
+>mou dl1:rsxm26
+>asn dl1:=sy:
+>rem ...at.
+>ins $bigind/pri=10.
+INS -- WARNING - PRIVILEGED TASK OVERMAPS I/O PAGE
+>set /uic=[200,200]
+>@sysgen
+>;
+>; RSX-11M Ver. 3.2 BL26 System Generation 3.2.3a done on 28-MAR-19 at 16:10:19
+>;
+>; Copyright (C) 1979 Digital Equipment Corporation, Maynard Mass.
+>;
+>; RL01 distribution kit
+>;
+>*  1. Inhibit MCR command lines (Type <ESC> for explanation)? [Y/N]:y
+>*  3. Use saved or canned answer file for input responses? [Y/N]:
+>* 10. Save responses (i.e.: create SYSSAVED.DAT)? [Y/N]:y
+>* 11. UIC for SYSSAVED files if not [200,200]  [S]: 
+>* 12. UIC for SYSGEN command files if not [200,200] [S]: 
+>* 14. Device, when ready, for Executive sources (ddu:)  [S]: dl2:
+>;
+>; Target configuration
+>;
+>*  1. Processor (e.g.: 11/34, LSI-11) [S R:5-6]: 11/70
+>*  3. Generating RSX-11S? [Y/N]:
+>*  4. Memory size (in K-word blocks) [D R:32.-1920.]: 128.
+>*  5. Mapped? [Y/N]:y
+>*  6. Any K-series laboratory devices? [Y/N]:
+>*  8. Floating point processor (FP-11) present? [Y/N]:y
+>* 10. If using KW11-P as system clock: number of intrps./sec. [D R:0.-1000.]: 
+>* 11. Line frequency:   A- 60 Hz    B- 50 Hz   [D: "A"] [S]: 
+>* 12. KW11-Y Watchdog timer support? [Y/N]:
+>* 13. Memory parity support? [Y/N]:y
+>* 14. Cache memory? [Y/N]:y
+>* 15. Highest interrupt vector (If 0 will be computed) [O R:0-774]: 
+>;     For device configuration: "*" Prints device table, "." Terminates inquiry
+>;     Enter devices and number of controllers for devices which require drivers
+>* 16. Devices [S]: cr,ct,db,dk,dl,dm,dt,dy,lp,mm,pp,pr,dd,co,nl,tt.
+>;
+>; Processor:11/70   Memory Size:128K,Mapped   System:RSX-11M
+>;
+>; Host configuration
+>;
+>*  1. Are you running SYSGEN standalone (on the baseline system)? [Y/N]:
+>*  2. Is a line printer available? [Y/N]:y
+>*  3. Spool assembly listings and Executive and driver maps? [Y/N]:n
+>*  4. Does the listing/map device have at least 120 columns? [Y/N]:y
+>*  5. Assembly listings device (ddu:) [D: "NL:"] [S]: db:
+>*  6. Map device for Executive and device drivers (ddu:) [D: SY:] [S]: db:
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>; Executive Options
+>;
+>;     Answer Y(ES) if the following support is desired
+>;
+>*  1. Will DBMS-11 be used? [Y/N]:y
+>;     Files-11 ACP support will be included
+>*  3. RMS record locking and placement control? [Y/N]:y
+>*  4. Non-resident tasks (task loader)? [Y/N]:y
+>*  5. Loadable task loader? [Y/N]:y
+>;     Memory management directives (PLAS) support will be included
+>;     Send/Receive by reference support will be included
+>*  8. Get mapping context directive? [Y/N]:y
+>;     Address checking support will be included
+>;     I/O rundown support will be included
+>* 11. Multi-user protection? [Y/N]:y
+>* 12. ANSI Magtape ACP? [Y/N]:y
+>* 13. On-line formatting (FMT) or on-line user-mode diagnostics? [Y/N]:y
+>* 14. Loadable device drivers? [Y/N]:y
+>* 15. Should the default for all applicable drivers be loadable? [Y/N]:y
+>;     AST support will be included
+>;     Cancel selective MARKTIMEs support will be included
+>* 17. Task termination and device not ready messages (TKTN)? [Y/N]:y
+>* 18. Power fail recovery? [Y/N]:
+>* 19. Install, request, and remove on exit? [Y/N]:y
+>* 20. Large (20K) Executive? [Y/N]:y
+>* 21. Logical device assignment? [Y/N]:y
+>* 22. Logging of device errors and timeouts? [Y/N]:y
+>* 23. Logging of undefined interrupts? [Y/N]:y
+>* 24. Logging of memory parity errors? [Y/N]:y
+>* 25. Do you intend to include a user-written driver? [Y/N]:
+>* 28. Disk writecheck? [Y/N]:y
+>* 29. Executive Debugging Tool (XDT)? [Y/N]:y
+>* 30. Rotating pattern in data lights? [Y/N]:y
+>* 31. Industrial network or DECnet? [Y/N]:y
+>* 32. Queue manager and queued print spooler? [Y/N]:y
+>* 33. Group global event flags? [Y/N]:y
+>;     For directives: "*" Prints table, "." Terminates inquiry, "%" Gets all
+>* 34. Enter code for directives [S]: %.
+>* 35. Number of pre-allocated QIO packets [D R:0.-15. D:5.]: 
+>* 36. Size of data transfer vector in words [D R:5.-33. D:33.]: 
+>* 37. Round-robin scheduling interval in ticks [D R:0.-1000. D:5.]: 
+>* 38. Highest priority class for consideration [D R:1.-249. D:150.]: 
+>* 39. Lowest priority class for consideration [D R:1.-150. D:1.]: 
+>* 40. Executive level disk swapping interval [D R:0.-5000. D:30.]: 
+>* 41. Swapping priority [D R:1.-20. D:5.]: 
+>* 42. Size of dynamic storage region (POOL) in words [D R:256.-16384. D:1024.]: 4096
+>* 43. Seconds between printer not ready messages [D R:0.-255. D:30.]: 255.
+>* 44. Seconds between card reader not ready messages [D R:0.-255. D:30.]: 255
+>* 45. System crash register and stack dump device CSR [O R:0-177700 D:177564]: 
+>* 46. Checkpointing:             A- Yes    B- With system ckpnt. file    [S]: b
+>* 47. System cntrled partitions: A- Yes    B- With auto compaction (SHF) [S]: b
+>* 48. Dump analysis:             A- PANIC  B- Crash (CDA)                [S]: b
+>* 49. Output notification device CSR [O R:160000-177700 D:177564]: 
+>* 50. Memory dump device (ddu:) [S R:3-4]: MM3:
+>* 51. CSR address of dump device [O R:160000-177700 D:172440]: 
+>;
+>; Terminal driver options
+>;
+>*  1. Terminal driver desired (A/B/C/D, * prints table) [S]: c
+>*  2. Unsolicited input timeout value in seconds [D R:0.-2540. D:120.]: 2540
+>;
+>;     Answer Y(ES) if the following support is desired
+>;
+>*  5. Task checkpointable during terminal input? [Y/N]:y
+>*  6. Unsolicited input character AST? [Y/N]:y
+>;     Breakthrough write support will be included
+>;     CTRL/R support will be included
+>* 10. Escape sequence handling? [Y/N]:y
+>* 11. Get multiple characteristics? [Y/N]:y
+>* 12. Set multiple characteristics? [Y/N]:y
+>* 13. Get terminal driver options? [Y/N]:y
+>* 17. Read after prompt? [Y/N]:y
+>* 20. CRT rubout support? [Y/N]:y
+>* 25. Hardware unrecoverable input error notification? [Y/N]:y
+>* 26. Device independent cursor positioning? [Y/N]:y
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>;     Thinking ...
+>;
+>; End of Executive option generation at 18:11:28 on 28-MAR-19
+>;
+>; Peripheral configuration
+>;
+>;     Parameters  appearing  in  square  brackets  "[...]"  can  only be
+>;     specified  for  the  first  controller  of  a  particular  device.
+>;     Parameters appearing in parentheses "(...)" only need be specified
+>;     if   the  indicated  option  is  present  on  the  target  system.
+>;    
+>;     The   default  for  loadable  drivers  has  been  set  to  *TRUE*.
+>;     To override this setting enter R (resident) as the first parameter
+>;     for    the    first    controller   of   the   specified   device.
+>;    
+>; A/D and Laboratory devices: None specified
+>;
+>; Interprocessor communication devices: None specified
+>;
+>; Unit record devices: CR, LP, PR, PP
+>;
+>; Enter [L/R,] vector, CSR for: 
+>;
+>*  1. CR controller 0 [D: 230,177160]              [S]: 
+>;
+>; Enter [L/R,] vector, CSR, printer type
+>;              (,[KMC timeout count <0=no KMC>, KMC vector, KMC CSR]) for:
+>;
+>* 16. LP controller 0 [D: 200,177514,LA180,0,300,160130] [S]: ,,LP11-S
+>;
+>; Enter [L/R,] vector, CSR for: 
+>;
+>*  1. PP controller 0 [D: 74,177554]               [S]: 
+>;
+>*  1. PR controller 0 [D: 70,177550]               [S]: 
+>;
+>; Disks: DB, DD, DK, DL, DM, DT, DY
+>;
+>; Enter [L/R,] vector, CSR, number of drives, unit number of first drive,
+>;              [O=offset recovery support/NO=no support] for:
+>;
+>*  2. DB controller 0 [D: 254,176700,,0,O]         [S]: ,,8
+>* 52. Contr 0 unit 0. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 1. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 2. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 3. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 4. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 5. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 6. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>* 52. Contr 0 unit 7. is an RP04,05/RP06 [D: RP06] [S]: RP06
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. DD controller 0 [D: 300,176500]              [S]: ,,2
+>;
+>; Enter [L/R,] vector, CSR, highest unit number <0 to 7> for:
+>;
+>*  6. DK controller 0 [D: 220,177404]              [S]: ,177400,7
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. DL controller 0 [D: 160,174400]              [S]: ,,4
+>* 53. Contr 0 unit 0. is an RL01/RL02 [D: RL01]    [S]: 
+>* 53. Contr 0 unit 1. is an RL01/RL02 [D: RL01]    [S]: 
+>* 53. Contr 0 unit 2. is an RL01/RL02 [D: RL01]    [S]: RL02
+>* 53. Contr 0 unit 3. is an RL01/RL02 [D: RL01]    [S]: RL02
+>;
+>; Enter [L/R,] vector, CSR, # drives, O=offset recovery/NO=no offset rec. for:
+>;
+>* 13. DM controller 0 [D: 210,177440,,O]           [S]: ,,8,NO
+>* 54. Contr 0 unit 0. is an RK06/RK07 [D: RK06]    [S]: 
+>* 54. Contr 0 unit 1. is an RK06/RK07 [D: RK06]    [S]: 
+>* 54. Contr 0 unit 2. is an RK06/RK07 [D: RK06]    [S]: 
+>* 54. Contr 0 unit 3. is an RK06/RK07 [D: RK06]    [S]: RK07
+>* 54. Contr 0 unit 4. is an RK06/RK07 [D: RK06]    [S]: RK07
+>* 54. Contr 0 unit 5. is an RK06/RK07 [D: RK06]    [S]: RK07
+>* 54. Contr 0 unit 6. is an RK06/RK07 [D: RK06]    [S]: RK07
+>* 54. Contr 0 unit 7. is an RK06/RK07 [D: RK06]    [S]: RK07
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. DT controller 0 [D: 214,177342]              [S]: ,177340,8
+>;
+>*  3. DY controller 0 [D: 264,177170]              [S]: ,,2
+>* 58. Contr 0 unit 0. is SINGLE/DOUBLE density     [S]: SINGLE
+>* 58. Contr 0 unit 1. is SINGLE/DOUBLE density     [S]: DOUBLE
+>;
+>; Tapes: CT, MM
+>;
+>; Enter [L/R,] vector, CSR for: 
+>;
+>*  1. CT controller 0 [D: 260,177500]              [S]: 
+>;
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. MM controller 0 [D: 224,172440]              [S]: ,,4
+>* 51. MM controller 0 unit 0. formatter  [O R:0-7 D:0]: 
+>* 51. MM controller 0 unit 1. formatter  [O R:0-7 D:0]: 
+>* 51. MM controller 0 unit 2. formatter  [O R:0-7 D:0]: 
+>* 51. MM controller 0 unit 3. formatter  [O R:0-7 D:0]: 
+>;
+>; Non-physical (pseudo) devices: CO, TT, NL, TI, CL, LB, SY
+>;
+>; Enter [L/R,] terminal number to redirect to (TTn:) for:
+>;
+>* 18. CO controller 0 [D: 0]                       [S]: 
+>;
+>; Enter num. DL11's <ZL>, num. DH11's, num. DZ11's, num. DJ11's for:
+>;
+>* 20. The terminal driver  [D: 1,0,0,0]            [S]: ,,2
+>;
+>; Enter vector, CSR for:
+>;
+>* 21. ZL controller 0 [D: 60,177560]               [S]: 
+>;
+>; Enter vector, CSR, highest line number <0 to 7> [, answer speed] for:
+>;
+>* 24. DZ controller 0 [D: ,,,0]                    [S]: 300,160100,7,9600
+>* 24. DZ controller 1                              [S]: 310,160110,7,9600
+>;     SGN -- Illegal trailing characters or extra parameters "9600" -- RETRY
+>* 24. DZ controller 1                              [S]: 310,160110,7
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: r
+>;     SGN -- Repetition on the peripherals section is not possible at this tim
+>;
+>* Do you wish to continue with this SYSGEN? [Y/N]:y
+>;
+>; End of interrupt vector area has been set to 400
+>;
+>;
+>; Create Executive build files
+>;
+>;
+>; Assemble the Executive
+>;
+>;
+>*  1. Do you wish to edit any of the Executive files? [Y/N]:n
+>;
+>*  2. Is DB: initialized, mounted with UFD [11,34], and ready? [Y/N]:y
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section E-exit P-pause [S]: 
+>;
+>;
+>; Prepare for task building
+>;
+>;
+>* EOS * Do you want to: <CR>-continue R-repeat section P-pause [S]: 
+>;
+>;
+>; End of SYSGEN phase I at 19:12:43 on 28-MAR-19
+>;     -- To continue type: @[200,200]SYSGEN2
+>;
+>@ <EOF>
+>
+>ufd db:[11,34]
+>
+

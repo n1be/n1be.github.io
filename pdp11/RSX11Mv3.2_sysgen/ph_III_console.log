@@ -1,0 +1,450 @@
+
+
+  RSX-11M V3.2 BL26   1920K  MAPPED
+>RED DB:=SY:
+>RED DB:=LB:
+>MOU DB:RSXM26PATCHE
+>@DB:[1,2]STARTUP
+>* Enter date and time ( dd-mmm-yy hh:mm ) [S]: 
+
+Connected to the PDP-11 simulator CON-TELNET device
+
+2-apr-19 13:18
+>TIM 2-apr-19 13:18
+>set /pub=db1:
+>mou db1:USERDIRS
+>ACS SY:/BLKS=512.
+>; SetTTYs.cmd set terminal characteristics
+>set /term=TT0:LA120
+>set /buf=TT0:132.
+>set /crt=tt0:
+>set /formfeed=tt0:
+>set /lines=tt0:66.
+>set /lower=tt0:
+>set /buf=lp0:132.
+>set /term=TT20:VT100
+>set /ebc=TT20:
+>set /escseq=TT20:
+>set /fdx=TT20:
+>set /lower=TT20:
+>set /speed=TT20:9600:9600
+>set /term=TT17:VT100
+>set /ebc=TT17:
+>set /escseq=TT17:
+>set /fdx=TT17:
+>set /lower=TT17:
+>set /speed=TT17:9600:9600
+>set /term=TT16:VT100
+>set /ebc=TT16:
+>set /escseq=TT16:
+>set /fdx=TT16:
+>set /lower=TT16:
+>set /speed=TT16:9600:9600
+>set /term=TT15:VT100
+>set /ebc=TT15:
+>set /escseq=TT15:
+>set /fdx=TT15:
+>set /lower=TT15:
+>set /speed=TT15:9600:9600
+>set /term=TT14:VT100
+>set /ebc=TT14:
+>set /escseq=TT14:
+>set /fdx=TT14:
+>set /lower=TT14:
+>set /speed=TT14:9600:9600
+>set /term=TT13:VT100
+>set /ebc=TT13:
+>set /escseq=TT13:
+>set /fdx=TT13:
+>set /lower=TT13:
+>set /speed=TT13:9600:9600
+>set /term=TT12:VT100
+>set /ebc=TT12:
+>set /escseq=TT12:
+>set /fdx=TT12:
+>set /lower=TT12:
+>set /speed=TT12:9600:9600
+>set /term=TT11:VT100
+>set /ebc=TT11:
+>set /escseq=TT11:
+>set /fdx=TT11:
+>set /lower=TT11:
+>set /speed=TT11:9600:9600
+>set /term=TT10:VT100
+>set /ebc=TT10:
+>set /escseq=TT10:
+>set /fdx=TT10:
+>set /lower=TT10:
+>set /speed=TT10:9600:9600
+>set /term=TT7:VT100
+>set /ebc=TT7:
+>set /escseq=TT7:
+>set /fdx=TT7:
+>set /lower=TT7:
+>set /speed=TT7:9600:9600
+>set /term=TT6:VT100
+>set /ebc=TT6:
+>set /escseq=TT6:
+>set /fdx=TT6:
+>set /lower=TT6:
+>set /speed=TT6:9600:9600
+>set /term=TT5:VT100
+>set /ebc=TT5:
+>set /escseq=TT5:
+>set /fdx=TT5:
+>set /lower=TT5:
+>set /speed=TT5:9600:9600
+>set /term=TT4:VT100
+>set /ebc=TT4:
+>set /escseq=TT4:
+>set /fdx=TT4:
+>set /lower=TT4:
+>set /speed=TT4:9600:9600
+>set /term=TT3:VT100
+>set /ebc=TT3:
+>set /escseq=TT3:
+>set /fdx=TT3:
+>set /lower=TT3:
+>set /speed=TT3:9600:9600
+>set /term=TT2:VT100
+>set /ebc=TT2:
+>set /escseq=TT2:
+>set /fdx=TT2:
+>set /lower=TT2:
+>set /speed=TT2:9600:9600
+>set /term=TT1:VT100
+>set /ebc=TT1:
+>set /escseq=TT1:
+>set /fdx=TT1:
+>set /lower=TT1:
+>set /speed=TT1:9600:9600
+>ins $bru
+INS -- FILE NOT FOUND
+>ins $cmp
+>ins $crf
+>ins $dmp
+>ins $dsc
+INS -- FILE NOT FOUND
+>ins $edi
+>ins $edt
+>ins $flx
+>ins $ftb
+INS -- FILE NOT FOUND
+>ins $iox
+>ins $lbr
+>ins $bigmac
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>ins $pat
+>ins $pip
+>ins $pse
+INS -- FILE NOT FOUND
+>ins $slp
+>ins $sye
+INS -- FILE NOT FOUND
+>ins $bigtkb
+INS -- PARTITION PAR14K NOT IN SYSTEM, DEFAULTING TO GEN
+>ins $zap
+>set /logon
+>@ <EOF>
+>pip db  lb:[1,1]*.olb/li
+
+
+DIRECTORY DB0:[1,1]
+2-APR-19 13:19
+
+EXELIB.OLB;2        24.     C  26-MAY-79 13:52
+VMLIB.OLB;2         16.     C  26-MAY-79 13:52
+SYSLIB.OLB;2        188.       26-MAY-79 13:52
+ANSLIB.OLB;1        214.       31-MAR-19 15:08
+
+TOTAL OF 442./443. BLOCKS IN 4. FILES
+
+
+
+>pip lb:[1,1]syslib.olb= =en/nv=lb:[1,1]               /en/nv=lb:[1,1]anslib.olb
+>pip lb:[1,1]*.olb/li
+
+
+DIRECTORY DB0:[1,1]
+2-APR-19 13:22
+
+SYSLIB.OLB;3        214.       31-MAR-19 15:08
+EXELIB.OLB;2        24.     C  26-MAY-79 13:52
+VMLIB.OLB;2         16.     C  26-MAY-79 13:52
+ANSLIB.OLB;1        214.       31-MAR-19 15:08
+
+TOTAL OF 468./469. BLOCKS IN 4. FILES
+
+
+
+>pip lb:[1,1]*.olb;*/li
+
+
+DIRECTORY DB0:[1,1]
+2-APR-19 13:22
+
+SYSLIB.OLB;3        214.       31-MAR-19 15:08
+EXELIB.OLB;2        24.     C  26-MAY-79 13:52
+VMLIB.OLB;2         16.     C  26-MAY-79 13:52
+SYSLIB.OLB;2        188.       26-MAY-79 13:52
+ANSLIB.OLB;1        214.       31-MAR-19 15:08
+
+TOTAL OF 656./657. BLOCKS IN 5. FILES
+
+
+
+>set /uic=[200,200]
+>asn lb:=sy:
+>@sysgen3
+>;
+>; SYSGEN PART 3         <VERSION 03.2>
+>;
+>; COPYRIGHT (C) 1976, 1977
+>; DIGITAL EQUIPMENT CORP., MAYNARD, MASS.  01754
+>;
+>;      BUILD SELECTED UTILITY TASKS AND/OR USER MODE DIAGNOSTICS.
+>;
+>* DO YOU WANT EXPANDED COMMENTS FOR SYSGEN PART 3? [Y/N]:
+>* ARE YOU RUNNING ON A MACHINE WITH AT LEAST 24K WORDS? [Y/N]:y
+>* ARE YOU BUILDING A MAPPED SYSTEM? [Y/N]:y
+>* DO YOU HAVE THE DUAL RK05 DISTRIBUTION KIT? [Y/N]:
+>* DO YOU HAVE THE RL01 DISTRIBUTION KIT? [Y/N]:
+>* ARE YOU RUNNING ON A MACHINE WITH A LINE PRINTER? [Y/N]:y
+>* Was ANSI magtape support selected in SYSGEN phase I? [Y/N]:y
+>* Was user mode diagnostic support selected in SYSGEN phase I? [Y/N]:y
+>* Do you want to (re)build any utility tasks? [Y/N]:y
+>* DO YOU WANT TO BUILD ANY USER MODE DIAGNOSTICS? [Y/N]:
+>SET /UIC=[1,24]
+>* Do you want to E-edit and build, B-build task MAC [S]: 
+>* Do you want to E-edit and build, B-build task BIGMAC [S]: 
+>* Do you want to E-edit and build, B-build task TKB [S]: 
+>* Do you want to E-edit and build, B-build task BIGTKB [S]: 
+>* Do you want to E-edit and build, B-build task PIP [S]: e
+>EDI PIPBLD.CMD
+[00036 LINES READ IN]
+[PAGE    0]
+*pl ANSI
+; NOTE: IF YOU REBUILD PIP WITH ANSI MAGTAPE SUPPORT,
+*
+;       YOU WILL HAVE TO ALTER THE PARTITION STATEMENT
+*
+;       IN THIS BUILD FILE, OR INSTALL PIP WITH THE
+*
+;       /INC SWITCH, AS THE ANSI MAGTAPE ROUTINES CAUSE
+*
+;       PIP TO GROW SO THAT THERE IS NO ROOM FOR BUFFERS.
+*
+;
+*
+PAR=GEN:0:40000
+*ch /4/7/
+PAR=GEN:0:70000
+*ex
+[EXIT]
+
+>* Do you want to E-edit and build, B-build task FLX [S]: 
+>* Do you want to E-edit and build, B-build task VFY [S]: 
+>* Do you want to E-edit and build, B-build task DMP [S]: 
+>* Do you want to E-edit and build, B-build task EDI [S]: 
+>* Do you want to E-edit and build, B-build task SLP [S]: 
+>* Do you want to E-edit and build, B-build task BRU [S]: 
+>* Do you want to E-edit and build, B-build task LBR [S]: 
+>* Do you want to E-edit and build, B-build task PSE [S]: 
+>* Do you want to E-edit and build, B-build task SYE [S]: 
+>* Do you want to E-edit and build, B-build task CRF [S]: 
+>* Do you want to E-edit and build, B-build task ZAP [S]: 
+>* Do you want to E-edit and build, B-build task BAD [S]: 
+>* Do you want to E-edit and build, B-build task VMR [S]: 
+>* Do you want to E-edit and build, B-build task FTB [S]: 
+>* Do you want to E-edit and build, B-build task CMP [S]: 
+>* Do you want to E-edit and build, B-build task PAT [S]: 
+>* Do you want to E-edit and build, B-build task DSC [S]: 
+>* Do you want to E-edit and build, B-build task CDA [S]: 
+>* Do you want to E-edit and build, B-build task EDT [S]: 
+>* Do you want to E-edit and build, B-build task FMT [S]: 
+>* Do you want to E-edit and build, B-build task IOX [S]: 
+>* DO YOU WANT TO PRINT THE MAPS FOR THE UTILITY TASKS? [Y/N]:
+>ASN NL:=MP:
+>SET /UIC=[1,20]
+>TKB @[1,24]PIPBLD
+>SET /UIC=[1,54]
+>@ <EOF>
+>pip pip.*;*/li
+
+
+DIRECTORY DB0:[1,54]
+2-APR-19 13:25
+
+PIP.TSK;3           70.     C  02-APR-19 13:25
+PIP.TSK;2           67.     C  26-MAY-79 13:55
+
+TOTAL OF 137./137. BLOCKS IN 2. FILES
+
+
+
+>rem ...pip
+>ins $pip
+>pip lb:[1,1]*.olb/li
+
+
+DIRECTORY DB0:[1,1]
+2-APR-19 13:27
+
+SYSLIB.OLB;3        214.       31-MAR-19 15:08
+EXELIB.OLB;2        24.     C  26-MAY-79 13:52
+VMLIB.OLB;2         16.     C  26-MAY-79 13:52
+ANSLIB.OLB;1        214.       31-MAR-19 15:08
+
+TOTAL OF 468./469. BLOCKS IN 4. FILES
+
+
+
+>pip lb:[1,1]syslib.olb;3/rm
+>lb:[1,1]*.olb;*/li                  pip lb:[1,1]*.olb;*/li
+
+
+DIRECTORY DB0:[1,1]
+2-APR-19 13:28
+
+EXELIB.OLB;2        24.     C  26-MAY-79 13:52
+VMLIB.OLB;2         16.     C  26-MAY-79 13:52
+SYSLIB.OLB;2        188.       26-MAY-79 13:52
+ANSLIB.OLB;1        214.       31-MAR-19 15:08
+
+TOTAL OF 442./443. BLOCKS IN 4. FILES
+
+
+
+>asn lb:=sy:
+>set /uic=[200,200]
+>@sysgen3
+>;
+>; SYSGEN PART 3         <VERSION 03.2>
+>;
+>; COPYRIGHT (C) 1976, 1977
+>; DIGITAL EQUIPMENT CORP., MAYNARD, MASS.  01754
+>;
+>;      BUILD SELECTED UTILITY TASKS AND/OR USER MODE DIAGNOSTICS.
+>;
+>* DO YOU WANT EXPANDED COMMENTS FOR SYSGEN PART 3? [Y/N]:
+>* ARE YOU RUNNING ON A MACHINE WITH AT LEAST 24K WORDS? [Y/N]:y
+>* ARE YOU BUILDING A MAPPED SYSTEM? [Y/N]:y
+>* DO YOU HAVE THE DUAL RK05 DISTRIBUTION KIT? [Y/N]:
+>* DO YOU HAVE THE RL01 DISTRIBUTION KIT? [Y/N]:
+>* ARE YOU RUNNING ON A MACHINE WITH A LINE PRINTER? [Y/N]:y
+>* Was ANSI magtape support selected in SYSGEN phase I? [Y/N]:y
+>* Was user mode diagnostic support selected in SYSGEN phase I? [Y/N]:y
+>* Do you want to (re)build any utility tasks? [Y/N]:y
+>* DO YOU WANT TO BUILD ANY USER MODE DIAGNOSTICS? [Y/N]:y
+>SET /UIC=[1,24]
+>* Do you want to E-edit and build, B-build task MAC [S]: 
+>* Do you want to E-edit and build, B-build task BIGMAC [S]: 
+>* Do you want to E-edit and build, B-build task TKB [S]: b
+>* Do you want to E-edit and build, B-build task BIGTKB [S]: b
+>* Do you want to E-edit and build, B-build task PIP [S]: 
+>* Do you want to E-edit and build, B-build task FLX [S]: b
+>* Do you want to E-edit and build, B-build task VFY [S]: 
+>* Do you want to E-edit and build, B-build task DMP [S]: 
+>* Do you want to E-edit and build, B-build task EDI [S]: b
+>* Do you want to E-edit and build, B-build task SLP [S]: 
+>* Do you want to E-edit and build, B-build task BRU [S]: b
+>* Do you want to E-edit and build, B-build task LBR [S]: b
+>* Do you want to E-edit and build, B-build task PSE [S]: b
+>* Do you want to E-edit and build, B-build task SYE [S]: b
+>* Do you want to E-edit and build, B-build task CRF [S]: 
+>* Do you want to E-edit and build, B-build task ZAP [S]: 
+>* Do you want to E-edit and build, B-build task BAD [S]: b
+>* Do you want to E-edit and build, B-build task VMR [S]: b
+>* Do you want to E-edit and build, B-build task FTB [S]: b
+>* Do you want to E-edit and build, B-build task CMP [S]: 
+>* Do you want to E-edit and build, B-build task PAT [S]: 
+>* Do you want to E-edit and build, B-build task DSC [S]: b
+>* Do you want to E-edit and build, B-build task CDA [S]: b
+>* Do you want to E-edit and build, B-build task EDT [S]: e
+>EDI EDTBLD.CMD
+[00036 LINES READ IN]
+[PAGE    0]
+*pl DIAGNOSTIC
+[00036 LINES READ IN]
+[00012 LINES READ IN]
+; DEFAULT DIAGNOSTIC FILE DEVICE IS "SY".  TO USE "LB" INSTEAD,
+*
+; THE FOLLOWING PATCH SHOULD BE ENABLED.
+*
+; THE ERROR MESSAGE FILE IS LB:[1,2]EDTCOM.MSG ON VAX.
+*
+;
+*
+;
+*
+;GBLPAT=EDT:MSGDEV:41114
+*ch /;/
+GBLPAT=EDT:MSGDEV:41114
+*
+;
+*ex
+[EXIT]
+
+>* Do you want to E-edit and build, B-build task FMT [S]: b
+>* Do you want to E-edit and build, B-build task IOX [S]: 
+>* DO YOU WANT TO PRINT THE MAPS FOR THE UTILITY TASKS? [Y/N]:
+>ASN NL:=MP:
+>SET /UIC=[1,20]
+>TKB @[1,24]TKBBLD
+>TKB @[1,24]BIGTKBBLD
+>TKB @[1,24]FLXBLD
+>TKB @[1,24]EDIBLD
+>TKB @[1,24]BRUBLD
+>TKB @[1,24]LBRBLD
+>TKB @[1,24]PSEBLD
+>TKB @[1,24]SYEBLD
+>TKB @[1,24]BADBLD
+>TKB @[1,24]VMRBLD
+>TKB @[1,24]CDABLD
+>TKB @[1,24]FTBBLD
+>TKB @[1,24]DSCBLD
+>TKB @[1,24]EDTBLD
+>TKB @[1,24]FMTBLD
+>* DO YOU WANT EXPANDED COMMENTS FOR THE UMD BUILD PROCEDURE? [Y/N]:
+>* IS THE TARGET SYSTEM AN 11/70? [Y/N]:y
+>SET /UIC=[1,24]
+>* DO YOU WANT TO ALTER THE DEFAULT PARTITION ATTRIBUTES? [Y/N]:
+>* ENTER THE BUFFER SIZE IN OCTAL BYTES (DEFAULT=2000) [S]: 
+>* DO YOU WANT TASK BUILD MAPS? [Y/N]:
+>* DO YOU WANT TO BUILD ALL AVAILABLE DIAGNOSTICS? [Y/N]:y
+>* HAVE ALL QUESTIONS BEEN ANSWERED TO YOUR SATISFACTION? [Y/N]:y
+>;
+>; NOW WE TASK BUILD THE SELECTED DIAGNOSTICS
+>;
+>TKB @UMDBLD
+>SET /UIC=[1,54]
+>@ <EOF>
+>run $shutup
+
+RSX11M SHUT DOWN PROGRAM
+
+ENTER MINUTES TO WAIT BEFORE SHUTDOWN: 0
+OK TO SHUTDOWN? [Y/N]: y
+ALL FURTHER LOGINS ARE DISABLED
+
+02-APR-19 14:10 PLEASE FINISH UP, 0   MINUTES BEFORE SHUTDOWNALL FURTHER LOGINS ARE DISABLED
+@LB:[1,2]SHUTUP
+
+AT. -- FILE NOT FOUND
+@LB:[1,2]SHUTUP
+>
+ACS DB0:/BLKS=0.
+ACS -- CHECKPOINT FILE NOW INACTIVE
+>
+DMO DB0:/DEV
+DMO -- SYSTEM  DISMOUNTED FROM DB0:    *** FINAL DISMOUNT *** 
+ 14:10:56  *** DB0:  -- DISMOUNT COMPLETE 
+
+>
+DMO DB1:/DEV
+DMO -- SYSTEM  DISMOUNTED FROM DB1:    *** FINAL DISMOUNT *** 
+ 14:11:02  *** DB1:  -- DISMOUNT COMPLETE 
+
+>
+Disconnected from the PDP-11 simulator
+

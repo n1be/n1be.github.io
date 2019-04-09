@@ -13,7 +13,7 @@
 <body>
   <h1>PDP-11 Hardware</h1>
   <h2>Obtain A System</h2>
-I extensively used various PDP-11s from 1974 to 1985, mostly as a DEC employee.  But I no longer have access to a PDP-11.  So I will resort to running a simulated system.  This project uses the SIMH PDP11 simulator from <a href="http://simh.trailing-edge.com/">The Computer History Simulation Project</a>. 
+I extensively used various PDP-11s from 1974 to 1985, mostly as a DEC employee.  But I no longer have access to a PDP-11.  So I will resort to running a simulated system.  This project uses the SIMH PDP11 simulator from <a href="http://simh.trailing-edge.com/">The Computer History Simulation Project</a>.
 <p>
 It was very simple to get the simulator running on my Linux system.
 First download the zip file of the sources for the latest version of SIMH.
@@ -1686,12 +1686,17 @@ E-P--T-DD--D----------------------------------------------------
 </PRE></TABLE>
 
 <h2>SYSGEN Phase III</h2>
-Before starting phase III, The RLUTIL disk gets attached to RL2.  Since we are now using the generated Executive, all devices may be used.
 <p>
-<TABLE><CAPTION cellpadding=5><em>PDP-11 Console Interaction</em></CAPTION><TD><PRE>
-This is just a placeholder, as
-I have not done Sysgen III yet.
-</PRE></TABLE>
-
+Sysgen Phase III allows the system administrator to build or rebuild the
+nonprivileged tasks that are distributed with RSX-11M.  For a mapped system,
+like the one generated here, nonprivileged tasks generally do not need to be
+rebuilt.  I had a functioning system with nonprivileged tasks from the
+baseline system so Sysgen Phase III was bypassed.</p>
+<p>
+At a later time, I re-did an RSX-11M sysgen.  Since autopatches were applied,
+Sysgen Phase III was necessary to rebuild nonprivileged tasks with the fixes
+from DEC.  You can see my discussion of the resulting Sysgen including Phase III
+<a href="RSXM32_Redux.html#SysgenPhase3">here</a></p>
+ 
 </body>
 </html>
