@@ -1,0 +1,298 @@
+<head>
+  <title>Analyze and Fix Executive Crash in RSX-11M v3.2</title>
+ <style>  
+ table {  
+ background: #609900;  
+ }  
+   
+ td {  
+ background: #ffffdd
+ }  
+ </style>  
+</head>
+<body>
+
+  <h1 id="Redux">Correcting a RSX-11M v3.2 System Crash</h1>
+  <p>
+  After <a href="RSXM32_Redux.html">a recent SYSGEN</a> there is a crash of the
+  executive when accessing an RK05 disk.  This requires a reboot and on a
+  multi-user system the work of other users could easily get lost.  (To avoid
+  lossage, during the 1970's we got in the habit of saving our editor buffers
+  every 10 minutes).</p>
+
+
+  <h2 id="Symptoms">Obvious Symptoms of the Problem</h2>
+  <p>
+  The executive traps into XDT when a known good RK05 disk (device DK) is being
+  accessed.
+  This problem was easy to reproduce.  When it occurs there is a prompt at the
+  console from XDT.  I/O from other devices and all processing stop:</p>
+  <table cellpadding=5><caption><em>Console log of the crash</em></caption><td><pre>
+>all dk2:
+>ini dk2:
+OD:120334                            
+XDT></pre>
+  </td></table>
+
+  <h3 id="Anal1">Initial analysis</h3>
+  <p>
+  This was not a problem on a recently generated RSX-11M V3.2 system.  What
+  changed between then and when the problem occurred?<ul>
+    <li>Both systems included the DB, DK, DL drivers.</li>
+    <li>Both systems are for the same RSX-11M version</li>
+    <li>The install kit was updated by autopatch "E" before the failing
+	SYSGEN.</li>
+    <li>The configuration was changed to add more devices before the failing
+	SYSGEN.</li>
+    <li>"Hardware" that RSX is running on has not been changed; no change to Simh, Raspbian,
+	the Raspberry Pi, or the uSDHC card.</li>
+  </ul>
+  <p>
+  RL01/2 and RP06 (devices DL and DB) disks work without any problem.
+  Therefore I do not suspect F11ACP or the executive.  This problem seems
+  to be local to the DK driver.</p>
+  <p>
+  Initially I suspected that applying autopatch "E" introduced an issue.  But
+  inspection showed that the driver source, DKDRV.MAC, was not patched.  And
+  examination of DKDRV.MAC seems to indicate that this driver is unchanged since
+  RSX-11M V3.1.  This suggessts stable and well tested code.</p>
+
+  <h3 id="Refs">Reference Materials</h3>
+  <p>
+  A few references are needed to understand the problem at a deeper level.  These
+  documents from bitsavers were handy:<br />
+  &nbsp;* PDP-11 Programming Card (Prog), <br />
+  &nbsp;* PDP-11/70 Processor Handbook (Proc),<br />
+  &nbsp;* RSX-11M V3.2 Guide to Writing an I/O Driver (Guide),<br />
+  &nbsp;* IAS/RSX-11 ODT Reference Manual (ODT),
+  </p>
+  <p>
+  Since XDT has control of the system, let's use XDT to
+  examine memory and hardware state.  (Guide section 3.4: XDT is a subset of ODT).
+  </p>
+  <p>
+  My crash analysis technique is to quickly gather some info that almost always
+  is needed.  With that context I dig deeper.  I will show a transcript of the
+  XDT interaction.  While using XDT, a &lt;Line-Feed> character (Ctrl-J) can be typed
+  to examine the next location.  References to various info will be flagged by
+  ">>>&nbsp;some&nbsp;text".  Where ">>>" appears, the >>> and everything that
+  follows on that line are my comments, not part of the XDT interaction.</p>
+
+  <table cellpadding=5><caption><em>First pass of XDT data collection</em></caption><td><pre>
+OD:120334          >>> OD = trap 4, PC of next instruction
+
+                   >>> CPU State
+XDT>$s/030000      >>> PSW 
+                   >>> general purpose registers ...
+XDT>$0/000375      >>> R0
+$1 /063760         >>> R1
+$2 /177400         >>> R2
+$3 /063760         >>> R3
+$4 /053504         >>> R4
+$5 /053200         >>> R5
+$6 /000646         >>> R6: Stack Pointer
+$7 /120334         >>> R7: PC
+
+                   >>> Examine code at vicinity of failure
+XDT>120320/005412  >>> neg  (r2)
+120322 /005742     >>> tst  -(r2)
+120324 /012700     >>> mov  #375,r0
+120326 /000375 
+120330 /105762     >>> tstb -4(r2)
+120332 /177774 
+120334 /100410     >>> bmi  120356
+120336 /132761     >>> bitb #4,12(r1)
+120340 /000004 
+120342 /000012 
+</pre></td></table>
+
+  <p>
+  Print out when the crash occurs is "<strong>OD:120334</strong>". (ODT section
+  5.2: "OD" indicates an odd address or other trap 4; 120334 is the address of
+  the instruction after the one where the trap occurred.)  (Prog: Trap 4 is due
+  to Time Out and other errors.)</p>
+  <p>
+  As expected PSW shows the CPU is executing code in kernel mode (Prog).</p>
+  <p>
+  R2 contains the address of the first RK11 device register
+  (Prog.).  This is unusual.  Typically PDP-11 device registers are referenced
+  relative to the address of the Control and Status Register (or CSR) address.
+  For the first RK11 controller in a system, the CSR address is 177404.</p>
+  <p>
+  Several words of code are examined before and after the PC of the failure.
+  Using (Prog) they are disassembled by hand.  Working forward from 120334 is
+  easy.  When working backwards, words at 120332 and 120326 are impossible or
+  unlikely to instructions, so try again with the previous word.</p>
+  <p>
+  To properly interpret addresses, we need to understand how RSX-11M has
+  allocated memory.  The lowest memory addresses, 000000 through 117777, 
+  (the first 20 KW) are used by
+  trap and interrupt vectors, the kernel mode stack, the executive code and
+  the pool (dynamic storage region).  The PAR command shows how the remainder
+  of memory is used.  This command was executed just before the crash, but
+  since partitions do not move it could also be done later when analyzing.</p>
+  <table cellpadding=5><caption><em>Memory Partioning</em></caption><td><pre>
+>par
+LDRPAR 00120000 00002400 MAIN TASK
+TTPAR  00122400 00040000 MAIN TASK
+DRVPAR 00162400 00031300 MAIN SYS
+       00162400 00002000 SUB  DRIVER -DB:
+       00164400 00002600 SUB  DRIVER -DD:
+       00167200 00001100 SUB  DRIVER -DK:
+       00170300 00002000 SUB  DRIVER -DL:
+       00172300 00002300 SUB  DRIVER -DM:
+       00174600 00001100 SUB  DRIVER -DT:
+       00175700 00002400 SUB  DRIVER -DY:
+       00200300 00001300 SUB  DRIVER -CR:
+       00201600 00000600 SUB  DRIVER -CT:
+       00202400 00001100 SUB  DRIVER -LP:
+       00203500 00004200 SUB  DRIVER -MM:
+       00207700 00000500 SUB  DRIVER -PP:
+       00210400 00000300 SUB  DRIVER -PR:
+       00210700 00003000 SUB  DRIVER -CO:
+SYSPAR 00213700 00010000 MAIN TASK
+FCPPAR 00223700 00050000 MAIN SYS
+       00223700 00047500 SUB  (F11ACP)
+FCSRES 00273700 00020000 MAIN COM
+RMSSEQ 00313700 00040000 MAIN COM
+GEN    00353700 16424100 MAIN SYS
+       00353700 00020000 SUB  (...MCR)
+       00433700 00040000 SUB  (COT...)
+       00533700 00040000 SUB  (QMG...)
+       00573700 00040000 SUB  (LPP0  )
+></pre></td></table>
+
+  <p>
+  (Proc section 5.3, Processor Traps) Trap to vector 4 occurs for Odd Address,
+  UNIBUS Time Out, or Non-Existent Memory.    Because this is a mapped system,
+  memory management state is needed to know what address is being accessed
+  by the failing instruction at 120330.  (Proc chapter 6) explains the PDP-11/70
+  memory management.</p>
+  <table cellpadding=5><caption><em>Examine Memory Management Registers</em></caption><td><pre>
+XDT>177572/000201  >>> MMR0 - Relocation is enabled
+177574 /000000     >>> MMR1 - N/A (trap incremented registers)
+177576 /050420     >>> MMR2 - N/A (trap PC)
+XDT>172516/000060  >>> MMR3 - 22 bit, no D-Space, UNIBUS map enabled
+
+XDT>172300/077506  >>> KISDR0 read/write, full 4KW
+172302 /077506     >>> KISDR1 read/write, full 4KW
+172304 /077506     >>> KISDR2 read/write, full 4KW
+172306 /077506     >>> KISDR3 read/write, full 4KW
+172310 /077506     >>> KISDR4 read/write, full 4KW
+172312 /077506     >>> KISDR5 read/write, full 4KW
+172314 /077406     >>> KISDR6 read/write, full 4KW
+172316 /077506     >>> KISDR7 read/write, full 4KW
+172320 /000000     >>> KDSDR0 N/A
+                   >>> six N/A registers not shown
+172336 /000000     >>> KDSDR7 N/A
+172340 /000000     >>> KISAR0 maps 20KW exec + pool in low memory
+172342 /000200     >>> KISAR1 maps 20KW exec + pool in low memory
+172344 /000400     >>> KISAR2 maps 20KW exec + pool in low memory
+172346 /000600     >>> KISAR3 maps 20KW exec + pool in low memory
+172350 /001000     >>> KISAR4 maps 20KW exec + pool in low memory
+172352 /001672     >>> KISAR5 maps loadable DK driver (576. bytes)
+172354 /003564     >>> KISAR6 maps unknown task in partition GEN
+172356 /177600     >>> KISAR7 maps 4K peripheral device page
+172360 /000000     >>> KDSAR0 N/A
+                   >>> seven N/A registers not shown
+</pre></td></table>
+
+  <p>
+  (Proc chapter 6):  MMR3 shows that 22-bit addresses are in use.  MMR3 also
+  indicates that Data Space is not being used.  Since the PSW shows current
+  mode is kernel, the kernel mapping registers are being used for address
+  translation.  Kernel APRs map as follows.<br />
+  &nbsp;* APR0 through APR4 map low memory (the executive).<br />
+  &nbsp;* APR5 maps the DK driver and whatever immediately follows in memory.<br />
+  &nbsp;* APR6 maps the address space of some task in the GEN partition.<br />
+  &nbsp;* APR 7 maps the I/O Page.</p>
+  <p>
+  <strong>ADDRESS TRANSLATION</strong> per (Proc chapter 6):<br />
+  &nbsp;* XDT used the same APR5 when examining the code as was in use when
+  the trap occurred.  This assures that the failing instruction at virtual
+  address 120330 is the "tstb -4(r2)" previously identified.<br />
+  &nbsp;* The byte being tested is at virtual address (contents of R2) -4 =
+  177400 - 4 = 177374(8),<br />
+  &nbsp;* Virtual address 177374 maps through APR7 to physical adddress (PA) 17777374.<br />
+  &nbsp;* (Proc section 6.7 Non-Existent Memory Errors): - If the high 4 bits of
+  the PA are one bits, the lower 18 bits are used for a UNIBUS address.  Thus
+  accessing PA 17777374 is mapped to a read of UNIBUS address 777374.</p>
+  &nbsp;* (Proc section 6.7): If after 10 to 20 uSec there is no response, the CPU
+  does a UNIBUS Time Out abort and bit 4 in the CPU Error Register is set.</p>
+  <p>
+  (Proc Appendix B): The CPU Error Register is at PA 17777766.  Examining that
+  register confirms the UNIBUS Time Out.  This is reasonable.  (Prog) and
+  (Proc Appendix B) show the RK11 registers are at UNIBUS addresses 777400 through
+  777416.  The Simp configuration printout shows no devices using 777374.</p>
+  <table cellpadding=5><caption><em>Examine the CPU Error Register</em></caption><td><pre>
+XDT>177766/000020  >>> CPU Error Register:               
+                   >>> Only bit 4 is set, thus UNIBUS Time Out.
+</pre></td></table>
+
+  <p>
+  Crash definitely occurred in the DKDRV.  Looking at the source code to get
+  more insight.  Task Builder map of DKDRV.TSK shows there is only one PSECT
+  called ". BLK.".  There is only one source module, DKDRV, that supplied all
+  the contents of that PSECT.  Addresses in that PSECT have been relocated to
+  virtual 120000.</p>
+  <table cellpadding=5><caption><em>Relevant Info from Map of DKDRV</em></caption><td><pre>
+MEMORY ALLOCATION SYNOPSIS:
+SECTION                                        TITLE  IDENT  FILE
+-------                                        -----  -----  ----
+. BLK.:(RW,I,LCL,REL,CON) 120000 001004 00516.
+                          120000 001004 00516. DKDRV  08     RSX11M.OLB;1
+</pre></td></table>
+  <p>
+  Examination of source of DKDRV lets us confirm the manual code disassembly
+  used earlier in the analysis.  (Add 120000 to addresses in this listing to
+  get the virtual address where the code will be at runtime.)
+  This shows intent of the code -- this
+  is important because we see the value in R2 gets modified.  At line
+  239 R2 should contain the CSR address of the RK11 controller.</p>
+  <table cellpadding=5><caption><em>Code in the DKDRV.LST for initiating I/O</em></caption><td><pre>
+228 000260  016402  000000G         MOV     S.CSR(R4),R2    ;GET ADDRESS OF CSR
+229 000264  016401  000000G         MOV     S.PKT(R4),R1    ;RETRIEVE ADDRESS OF I/O REQUEST PACKET
+230 000270  116464  000000G 000000G MOVB    S.ITM(R4),S.CTM(R4) ;SET CURRENT DEVICE TIMEOUT COUNT
+231 000276  062702  000006          ADD     #6,R2           ;POINT TO DISK ADDRESS REGISTER
+232 000302  016112  000034          MOV     I.PRM+10(R1),(R2)  ;INSERT DISK ADDRESS
+233 000306  016542  000002G         MOV     U.BUF+2(R5),-(R2)  ;INSERT BUFFER ADDRESS
+234 000312  016542  000000G         MOV     U.CNT(R5),-(R2) ;INSERT NUMBER OF BYTES TO TRANSFER
+235 000316  006012                  ROR     (R2)            ;CONVERT TO WORD COUNT
+236 000320  005412                  NEG     (R2)            ;MAKE NEGATIVE WORD COUNT
+237 000322  005742                  TST     -(R2)           ;POINT BACK TO CSR
+238 000324  012700  000000C         MOV     #IE.DNR&377,R0  ;ASSUME DRIVE NOT READY
+239 000330  105762  177774          TSTB    -4(R2)          ;IS DRIVE READY?
+240 000334  100410                  BMI     31$             ;IF MI YES
+</pre></td></table>
+  <p>
+  CSR address is loaded into R2 by line 228.  R2 is modified but when the trap
+  occured during instruction on line 239, R2 again should contain the CSR address.
+  R2 contained 177400; the correct CSR addr is 177404.  If R2 contained
+  177404 the trap would not have occurred.</p>
+  <p>
+  The wrong CSR address is due to an error made during the prepgen.  The
+  default address provided by SYSGEN.CMD should not have been changed.<br />
+  &nbsp;Similarly, the TC11 DECtape controller CSR address should not
+  override the default from SYSGEN.</p>
+  <table cellpadding=5><caption><em>Incorrect CSR selections during Prepgen</em></caption><td><pre>
+>; Enter [L/R,] vector, CSR, highest unit number <0 to 7> for:
+>;
+>*  6. DK controller 0 [D: 220,177404]              [S]: ,177400,7
+...
+>; Enter [L/R,] vector, CSR, number of drives for:
+>;
+>*  3. DT controller 0 [D: 214,177342]              [S]: ,177340,8
+</pre></td></table>
+
+  <hr />
+  <h2>Correcting the Problem</h2>
+  <p>
+  These problems can be fixed by editing LB:[200,200]SYSSAVED.CMD and removing
+  the explicit CSR addresses for the DK and DT devices.  Then SYSGEN Phases 1
+  and 2 can be re-run.  This is what was already demonstrated during the
+  <a href="RSXM32_Redux.html#sysSavedFix2">most recent SYSGEN</a>.  SYSGEN Phase
+  3 and what followed in that web page do not need to be done again.</p>
+  
+</body>
+</html>
+
