@@ -1,0 +1,142 @@
+<head>
+  <title>What is in the RSX-11M v3.2 Source Kit</title>
+ <style>  
+ table {  
+ background: #609900;  
+ }  
+   
+ td {  
+ background: #ffffdd
+ }  
+ </style>  
+</head>
+<body>
+
+  <h1>Discovering the RSX-11M v3.2 Sources</h1>
+
+  <h2>Source files in the RSX Distribution Kit</h2>
+  <p>
+  After doing an <a href="RSXM32_Redux.html">RSX-11M V3.2 SYSGEN</a> there
+  are sources for several system components available.  Exploring the media
+  one can find the following.</p>
+  <table cellpadding=5><caption><em>Source code from the RSX distribution kit</em></caption><td><pre>
+[2,300] -   UETP
+[11,10] -   Executive &amp; Drivers
+[11,42] -   FORRES.MAC (This is from the Fortran-4 kit)
+[12,10] -   MCR, IND, MCR Functions
+[14,10] -   RMDemo
+[15,10] -   PMD privileged tasks
+[45,10] -   laboratory I/O ?
+[200,200] - FCSRES.MAC
+</pre></td></table>
+
+  <h2>Sources for the privileged and unprivileged tasks</h2>
+  <p>
+  There are many utility programs provided in the RSX distribution kit.  Until
+  now I had not found the sources.  Fortunately I saw
+  <a href="ftp://ftp.trailing-edge.com/pub/rsxsource/rsxv32src.zip">
+  rsxv32src.zip</a> on ftp.trailing-edge.com.  The zip file contains a 10.9 MB
+  virtual tape in TPC format.  First one must extract the only file within the
+  zip archive, rsxv32src.tpc.  Simh can directly access the TPC tape format.
+  I used this initialization command.</p>
+  <table cellpadding=5><caption><em>Attaching rsxv32src.tpc</em></caption><td><pre>
+; Sources tape is mounted read-only on MM2:
+attach -f -r tu2 TPC  rsxv32src.tpc
+</pre></td></table>
+
+  <p>
+  By a process of trial and error the tape was found to be a BRU backup.  There
+  was too much data on the tape to fit on an RL02.  Therefore all the files were
+  restored to an RK07 for easier examination. These commands were used to copy
+  the sources to the disk.</p>
+  <table cellpadding=5><caption><em>Reading the source tape</em></caption><td><pre>
+>all mm2:
+>
+>;;; Get a list of backup_sets on the tape
+>bru /dire/rew mm2:
+VOL1.   RSXV32SRC	RSXV32SRC	18-NOV-81 18:15:31
+BRU - COMPLETED ON MM2:
+>
+>;;; Get contents of a selected backup_set
+>bru /dire/rew/backup_set:RSXV32SRC mm2:
+VOL1.   RSXV32SRC	RSXV32SRC	18-NOV-81 18:15:31
+[000,000]
+[013,010]
+ATCTL.MAC;1
+F11MAC.MAC;1
+CLEXT.MAC;1
+...
+<strong><em>;;; Printout of many more files is not shown here.</em></strong>
+
+>
+>;;; Restoring the tape to a disk -- this initializes the disk
+>all dm:
+>bru /rew/ini/backup_set:RSXV32SRC mm2: dm:
+BRU - STARTING TAPE 1 ON MM2:
+BRU -- *WARNING* -- THIS DISK WILL NOT CONTAIN A HARDWARE BOOTABLE SYSTEM
+BRU - END OF TAPE 1 ON MM2:
+BRU - COMPLETED
+>
+>mou dm:RSXV32SRC
+>pip dm:/fr
+DM0: HAS 32494. BLOCKS FREE, 21296. BLOCKS USED OUT OF 53790.
+LARGEST CONTIGUOUS SPACE = 32494. BLOCKS
+>
+</pre></td></table>
+
+  <p>
+  It seems like sources are provided for everything that comes with RSX-11M V3.2
+  except for the EDT text editor.  All these files were dated 25-Feb-81; almost
+  two years after the release of RSX-11M V3.2.  I do not know if that means that
+  the sources were updated to account for fixes provided by autopatch.</p>
+  <table cellpadding=5><caption><em>Sources found in rsxv32src.tpc</em></caption><td><pre>
+[1,20],  [2,200] -   BAD, DSC, PRESRV - build cmds
+[13,10], [13,20] -   F11ACP
+[14,10], [14,20] -   RMDemo
+[15,10], [15,20] -   ANCT, PMD, BRO, SHUTUP, LPINIT (KMC-11 FW loader)
+[17,10], [17,20] -   ERL, ERF (Error Logger)
+[22,10], [22,20] -   MTAACP
+[25,10], [25,20] -   Queue Manager
+[30,10], [30,20] -   Macro-11
+[31,10], [31,20] -   TKB
+[32,10], [32,20] -   PIP
+[33,10], [33,20] -   FLX
+[34,10], [34,20] -   VFY
+[35,10], [35,20] -   DMP
+[36,10], [36,20] -   DSC
+[37,10], [37,20] -   EDI
+[40,10], [40,20] -   SLP
+[41,10], [41,20] -   PRESRV
+[42,10], [42,20] -   LBR
+[46,10], [46,20] -   Print (Serial Despooler)
+[47,10], [47,20] -   ODT, TRACE
+[50,10], [50,20] -   FCS
+[51,10]          -   F4 OTS interface to RSX-11M ?
+[52,10], [52,20] -   Fortran callable Exec Directives & LPS routines
+[54,10], [54,20] -   error log formatters PSE, SYE
+[55,10], [55,20] -   FCS for F4 ?
+[56,10], [56,20] -   FCS for RSX-11S
+[57,10], [57,20] -   ZAP
+[60,10], [60,20] -   PIP Utilities?
+[61,10], [61,20] -   Executive Macros
+[62,10], [62,20] -   BAD
+[63,10], [63,20] -   DSC
+[64,10], [64,20] -   F11MSG
+[65,10], [65,20] -   CREF
+[67,10], [67,20] -   BIGMAC (needs sources in [30,10]
+[70,10], [70,20] -   VMR
+[73,10], [73,20] -   Universal Library Access
+[74,10], [74,20] -   BRU
+[101,10], [101,20] - User Mode Diagnostics
+[106,10], [106,20] - FTB
+[107,10], [107,20] - CMP
+[111,10], [111,20] - PAT
+[112,10], [112,20] - FMT
+[113,10], [113,20] - IOX
+[116,10], [116,20] - BAS
+[117,10], [117,20] - CDA
+[121,10], [121,20] - LPP Queue Manager De-spooler
+</pre></td></table>
+</body>
+</html>
+
