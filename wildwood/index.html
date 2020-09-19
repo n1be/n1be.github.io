@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Wildwood Webcams</title>
-	<meta name="description" content="Recent webcam snapshots." />
-	<link rel="icon" type="image/png" href="wildicon.png">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Wildwood Webcams</title>
+        <meta name="description" content="Recent webcam snapshots." />
+        <link rel="icon" type="image/png" href="wildicon.png">
     <!-- The following script is from:
         https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/2.5.2/Dropbox-sdk.min.js
     -->
     <script src="Dropbox-sdk_2.5.2_min.js"></script>
 
-	<script language="JavaScript" type="text/javascript">
+        <script language="JavaScript" type="text/javascript">
         var shown_objs = {},
             dbx = new Dropbox({ accessToken:
             "n8usDdsk46oAAAAAAASLZbalFZ8Mx6ov3jDVTmWUJ3jH1HTp9q2IMo647ZzS3ua6" });
@@ -87,8 +87,8 @@
                     reader.addEventListener("loadend", function() {
                         var chars = reader.result.trim();
                         if ( chars.length > 0) {
-                        	document.getElementById(id).innerHTML = prefix + chars;
-                        	debug_log( id + ': updated');
+                                document.getElementById(id).innerHTML = prefix + chars;
+                                debug_log( id + ': updated');
                         } else {
                         debug_log( id + ": skipping update");
                         }
@@ -112,15 +112,15 @@
     </script>
 </head>
 <body bgcolor="Black" text="Yellow" onload="refresh_elements()">
-	<center>
-	<!--
-        <h2><p id="b_time" /></h2>
-        <img alt="view from br" id="b_img"  width="960" height="540" border="0">
-	<hr />
-	 -->
-        <h2><p id="lr_time" /></h2>
-        <h3><p id="lr_temp" /></h3>
-        <img alt="view from lr" id="lr_img" width="1312" height="986" border="0">
-	</center>
+        <center>
+            <!--
+                <h2><p id="b_time" /></h2>
+                <img alt="view from br" id="b_img"  width="960" height="540" border="0">
+                <hr />
+            -->
+                <h2><p id="lr_time" /></h2>
+                <h3><p id="lr_temp" /></h3>
+                <img alt="view from lr" id="lr_img" width="1312" height="986" border="0">
+        </center>
 </body>
 </html>
