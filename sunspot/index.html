@@ -10,7 +10,7 @@
     -->
     <script src="Dropbox-sdk_2.5.2_min.js"></script>
 
-	<script language="JavaScript" type="text/javascript">
+    <script language="JavaScript" type="text/javascript">
         var shown_objs = {},
             dbx = new Dropbox({ accessToken:
             "n8usDdsk46oAAAAAAASLZbalFZ8Mx6ov3jDVTmWUJ3jH1HTp9q2IMo647ZzS3ua6" });
@@ -70,6 +70,7 @@
                 dbx.filesDownload({"path": path})
                     .then(function(response) {
                         var image = document.getElementById(id);
+                        image.width = window.innerWidth - 24;
                         image.src = window.URL.createObjectURL(response.fileBlob);
                         debug_log( id + ': updated');
                     })
@@ -102,24 +103,35 @@
         function refresh_elements() {
             // console.clear();
             debug_log( "Updating all elements")
+
             // get_image( "/webcam_latest.jpg", "west_img");
             get_image( "/raspicam_latest.jpg", "south_img");
             get_image( "/zerocam_latest.jpg", "north_img");
+
             // get_text( "Looking West ", "/webcam_time.txt","west_time");
             get_text( "Above, looking NorthEast ", "/zerocam_time.txt","north_time");
             get_text( "Below, looking South ", "/raspicam_time.txt","south_time");
-            get_text( "Garage upstairs was ", "/tripod_temp.txt","south_temp");
+
+            get_text( "Garage was ", "/tripod_temp.txt","south_temp");
             get_text( " Kitchen was ", "/zero_temp.txt","north_temp");
+
             window.setTimeout( refresh_elements, 20000);
         }
     </script>
+    <style>
+        img {
+	  <!-- js sets width when image loads.  This scales the height.  -->
+	  height: auto;
+	}
+    </style>
+
 </head>
 <body bgcolor="Black" text="Yellow" onload="refresh_elements()">
 	<center>
-        <img alt="view to the back" id="north_img" width="1312" height="986" border="0">
+        <img alt="view to the back" id="north_img" width="600" border="0">
         <h2><p id="north_time" /></h2>
         <h2><p id="south_time" /></h2>
-        <img alt="view to the left" id="south_img" width="1152" height="768" border="0">
+        <img alt="view to the left" id="south_img" width="600" border="0">
         <h3><p id="north_temp" /></h3>
         <h3><p id="south_temp" /></h3>
 	<!-- Not showing West camera ...
