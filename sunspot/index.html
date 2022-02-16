@@ -109,8 +109,8 @@
             get_image( "/zerocam_latest.jpg", "north_img");
 
             // get_text( "Looking West ", "/webcam_time.txt","west_time");
-            get_text( "Above, looking NorthEast ", "/zerocam_time.txt","north_time");
-            get_text( "Below, looking South ", "/raspicam_time.txt","south_time");
+            get_text( "Below, looking NorthEast ", "/zerocam_time.txt","north_time");
+            get_text( "Above, looking South ", "/raspicam_time.txt","south_time");
 
             get_text( "Garage was ", "/tripod_temp.txt","south_temp");
             get_text( " Kitchen was ", "/zero_temp.txt","north_temp");
@@ -128,10 +128,10 @@
 </head>
 <body bgcolor="Black" text="Yellow" onload="refresh_elements()">
 	<center>
-        <img alt="view to the back" id="north_img" width="600" border="0">
-        <h2><p id="north_time" /></h2>
-        <h2><p id="south_time" /></h2>
         <img alt="view to the left" id="south_img" width="600" border="0">
+        <h2><p id="south_time" /></h2>
+        <h2><p id="north_time" /></h2>
+        <img alt="view to the back" id="north_img" width="600" border="0">
         <h3><p id="north_temp" /></h3>
         <h3><p id="south_temp" /></h3>
 	<!-- Not showing West camera ...
