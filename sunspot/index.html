@@ -104,11 +104,11 @@
             // console.clear();
             debug_log( "Updating all elements")
 
-            // get_image( "/webcam_latest.jpg", "west_img");
+            get_image( "/webcam_latest.jpg", "west_img");
             get_image( "/raspicam_latest.jpg", "south_img");
             // get_image( "/zerocam_latest.jpg", "north_img");
 
-            // get_text( "Looking West ", "/webcam_time.txt","west_time");
+            get_text( "Below, looking West ", "/webcam_time.txt","west_time");
             // get_text( "Below, looking NorthEast ", "/zerocam_time.txt","north_time");
             get_text( "Above, looking South ", "/raspicam_time.txt","south_time");
 
@@ -136,11 +136,9 @@
 	<h3><p id="north_temp" /></h3>
 	End of not showing Kitchen camera -->
 	<h3><p id="south_temp" /></h3>
-	<!-- Not showing West camera ...
 	<hr />
 	<h2><p id="west_time" /></h2>
-	<img alt="view to the West" id="west_img"  width="1152" height="768" border="0">
-	End of not showing West camera -->
+	<img alt="view to the West" id="west_img"  width="600" border="0">
 	<hr />
 	</center>
 </body>
