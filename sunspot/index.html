@@ -106,14 +106,14 @@
 
             get_image( "/webcam_latest.jpg", "west_img");
             get_image( "/raspicam_latest.jpg", "south_img");
-            // get_image( "/zerocam_latest.jpg", "north_img");
+            get_image( "/zerocam_latest.jpg", "north_img");
 
             get_text( "Below, looking West ", "/webcam_time.txt","west_time");
-            // get_text( "Below, looking NorthEast ", "/zerocam_time.txt","north_time");
+            get_text( "Below, looking NorthEast ", "/zerocam_time.txt","north_time");
             get_text( "Above, looking South ", "/raspicam_time.txt","south_time");
 
             get_text( "Garage was ", "/tripod_temp.txt","south_temp");
-            // get_text( " Kitchen was ", "/zero_temp.txt","north_temp");
+            get_text( "House was ", "/zero_temp.txt","north_temp");
 
             window.setTimeout( refresh_elements, 20000);
         }
@@ -130,11 +130,10 @@
 	<center>
 	<img alt="view to the left" id="south_img" width="600" border="0">
 	<h2><p id="south_time" /></h2>
-	<!-- Not showing Kitchen Camera ...
+	<!--  Kitchen Camera ... -->
 	<h2><p id="north_time" /></h2>
 	<img alt="view to the back" id="north_img" width="600" border="0">
 	<h3><p id="north_temp" /></h3>
-	End of not showing Kitchen camera -->
 	<h3><p id="south_temp" /></h3>
 	<hr />
 	<h2><p id="west_time" /></h2>
